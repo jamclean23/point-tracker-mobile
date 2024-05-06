@@ -15,6 +15,24 @@ export default function Loading () {
     
     const [isLoaded, setIsLoaded] = useState(false);
 
+    // Logo text translate animation
+    const textAnim = new Animated.Value(1); // Amount logo text will be offset at start of animation
+
+    const pointTextAmount = textAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, -100]
+    });
+
+    const trackerTextAmount = textAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 100]
+    });
+
+    const textOpacAmount = textAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [1, 0]
+    });
+
     // Spinner animation
     const spinAnim = new Animated.Value(0);
 
@@ -26,10 +44,13 @@ export default function Loading () {
 
     // == UseEffect
 
+    // Start animations on mount
     useEffect(() => {
         handleSpinAnim();
+        handleLogoTextAnim();
     }, []);
 
+    // Handle load event
     useEffect(() => {
 
         if (isLoaded) {
@@ -38,7 +59,21 @@ export default function Loading () {
 
     }, [isLoaded]);
 
+
     // == Functions
+
+    function handleLogoTextAnim () {
+        Animated.timing(
+            textAnim, {
+                toValue: 0,
+                duration: 2000,
+                useNativeDriver: true,
+                easing: Easing.out(Easing.exp)
+            }
+        ).start(() => {
+            
+        });
+    }
 
     function handleIsLoaded () {
         stopSpinAnim();
@@ -82,18 +117,20 @@ export default function Loading () {
     return (
         <View style={styles.main}>
             <View style={{...styles.mainContainer, ...styles.logoContainer}}>
+                <Image style={styles.mainGradient} source={require('../../assets/gradient.png')}/>
                 <View style={styles.pointWrapper}>
-                    <Animated.Text style={{...styles.pointText, ...styles.logoText}}>Point</Animated.Text>
+                    <Animated.Text style={{...styles.pointText, ...styles.logoText, transform:[{translateX: pointTextAmount}], opacity: textOpacAmount}}>Point</Animated.Text>
                     <Image style={styles.logo} source={require('../../assets/point-tracker-logo.png')}/>
                 </View>
-                <Animated.Text style={{...styles.trackerText, ...styles.logoText}}>Tracker</Animated.Text>
+                <Animated.Text style={{...styles.trackerText, ...styles.logoText, transform:[{translateX: trackerTextAmount}], opacity: textOpacAmount}}>Tracker</Animated.Text>
             </View>
             
-            <View style={{...styles.mainContainer, ...styles.compassContainer}}>
+            <Animated.View style={{...styles.mainContainer, ...styles.compassContainer, opacity: textOpacAmount}}>
                 <Animated.View style={{transform:[{rotate:spinDegrees}]}}>
                     <Image style={styles.compass} source={require('../../assets/compass.png')}/>
                 </Animated.View>
-            </View>
+                <Text style={styles.loadingText}>Loading</Text>
+            </Animated.View>
 
             <View style={styles.mainContainer}>
 
@@ -108,8 +145,14 @@ export default function Loading () {
 const styles = StyleSheet.create({
     main: {
         height: '100%',
+        width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center'
+    },
+    mainGradient: {
+        position: 'absolute',
+        height: '140%',
+        resizeMode: 'stretch'
     },
     compass: {
         height: 100,
@@ -123,14 +166,11 @@ const styles = StyleSheet.create({
     logoContainer: {
         paddingTop: 60,
         paddingHorizontal: 60,
-        width: '100%',
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-
+        width: '100%'
     },
     logo: {
         height: 60,
         width: 60,
-        opacity: .8,
         resizeMode: 'contain'
     },
     pointText: {
@@ -152,5 +192,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center'
+    },
+    loadingText: {
+        alignItems: 'center',
+        textAlign: 'center',
+        color: 'white',
+        marginTop: 10
     }
 });

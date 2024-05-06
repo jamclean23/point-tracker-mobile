@@ -14,6 +14,9 @@ import InitScreen from './components/InitScreen/InitScreen';
 // ====== FUNCTIONS ======
 
 export default function App() {
+
+
+  // == Render
   return (
     <InitScreen>
       <Loading/>
@@ -25,10 +28,4 @@ export default function App() {
 // ====== STYLES ======
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 });

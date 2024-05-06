@@ -8,15 +8,15 @@ import {Animated, Easing, View, Text, StyleSheet, Image, ImageBackground} from '
 
 // ====== FUNCTIONS ======
 
-export default function Loading () {
+export default function Loading (props) {
     
 
     // == State
-    
-    const [isLoaded, setIsLoaded] = useState(false);
 
     // Logo text translate animation
-    const textAnim = new Animated.Value(1); // Amount logo text will be offset at start of animation
+    const textAnim = useRef(new Animated.Value(1)).current; // Amount logo text will be offset at start of animation
+
+    const textAnimDuration = 2000;
 
     const pointTextAmount = textAnim.interpolate({
         inputRange: [0, 1],
@@ -34,7 +34,7 @@ export default function Loading () {
     });
 
     // Spinner animation
-    const spinAnim = new Animated.Value(0);
+    const spinAnim = useRef(new Animated.Value(0)).current;
 
     const spinDegrees = spinAnim.interpolate({
         inputRange: [0, 1],
@@ -50,33 +50,31 @@ export default function Loading () {
         handleLogoTextAnim();
     }, []);
 
-    // Handle load event
+    // isLoaded Listener
     useEffect(() => {
-
-        if (isLoaded) {
-            handleIsLoaded();
+        if (props.isLoaded) {
+            startOutTransitions();
         }
-
-    }, [isLoaded]);
+    }, [props.isLoaded]);
 
 
     // == Functions
+
+
+    async function startOutTransitions () {
+        await startOutTextAnim();
+        props.reportLoadTransComplete();
+    }
 
     function handleLogoTextAnim () {
         Animated.timing(
             textAnim, {
                 toValue: 0,
-                duration: 2000,
+                duration: textAnimDuration,
                 useNativeDriver: true,
                 easing: Easing.out(Easing.exp)
             }
-        ).start(() => {
-            
-        });
-    }
-
-    function handleIsLoaded () {
-        stopSpinAnim();
+        ).start();
     }
 
     function handleSpinAnim () {
@@ -94,21 +92,17 @@ export default function Loading () {
         });
     }
 
-    async function stopSpinAnim () {
-
-        // TEST TIMER TO SIMULATE LOAD TIMES
-        await (() => {
-            return new Promise((resolve) => {
-                setTimeout(resolve, 4000);
-            });
-        })();
-
-        Animated.timing(spinAnim, {
-            toValue: 1,
-            duration: 1000,
-            useNativeDriver: true,
-            easing: Easing.elastic(1)
-        }).start();
+    function startOutTextAnim () {
+        return new Promise((resolve) => {
+            Animated.timing(
+                textAnim, {
+                    toValue: 1,
+                    duration: textAnimDuration,
+                    useNativeDriver: true,
+                    easing: Easing.out(Easing.exp)
+                }
+            ).start(resolve);
+        });
     }
 
 
@@ -117,10 +111,10 @@ export default function Loading () {
     return (
         <View style={styles.main}>
             <View style={{...styles.mainContainer, ...styles.logoContainer}}>
-                <Image style={styles.mainGradient} source={require('../../assets/gradient.png')}/>
+                <Animated.Image style={{...styles.mainGradient, opacity: textOpacAmount}} source={require('../../assets/gradient.png')}/>
                 <View style={styles.pointWrapper}>
                     <Animated.Text style={{...styles.pointText, ...styles.logoText, transform:[{translateX: pointTextAmount}], opacity: textOpacAmount}}>Point</Animated.Text>
-                    <Image style={styles.logo} source={require('../../assets/point-tracker-logo.png')}/>
+                    <Animated.Image style={{...styles.logo, opacity: textOpacAmount}} source={require('../../assets/point-tracker-logo.png')}/>
                 </View>
                 <Animated.Text style={{...styles.trackerText, ...styles.logoText, transform:[{translateX: trackerTextAmount}], opacity: textOpacAmount}}>Tracker</Animated.Text>
             </View>

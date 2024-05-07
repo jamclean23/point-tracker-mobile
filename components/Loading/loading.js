@@ -60,7 +60,6 @@ export default function Loading (props) {
 
     // == Functions
 
-
     async function startOutTransitions () {
         await startOutTextAnim();
         props.reportLoadTransComplete();

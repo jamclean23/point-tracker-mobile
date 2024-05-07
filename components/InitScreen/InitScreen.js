@@ -15,7 +15,6 @@ export default function InitScreen (props) {
 
     const [bgBlur, setBgBlur] = useState(10);
     const [bgLoaded, setBgLoaded] = useState(false);
-    const [bgImage, setBgImage] = useState(require('../../assets/loading-bg.png'));
 
 
     // == Functions

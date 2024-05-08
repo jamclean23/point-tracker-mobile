@@ -188,6 +188,7 @@ function name (text, config) {
     const errors = [];
 
     if (!text.length && config.required) {
+        console.log(text)
         errors.push('May not be blank');
     }
 
@@ -195,12 +196,13 @@ function name (text, config) {
         errors.push(`Must shorter than ${config.max} characters`);
     }
     
-    if (!/[a-zA-Z\d\s]/.test(text)) {
+    console.log(text.length);
+    if (!/^[a-zA-Z-]*$/.test(text)) {
         errors.push('No special characters or spaces');
     }
 
     if (text.length < config.min) {
-        errors.push(`Must be at least ${config.min} characters`);
+        errors.push(`Must be at least ${config.min} character${config.min > 1 ? 's' : ''}`);
     }
 
     return errors;

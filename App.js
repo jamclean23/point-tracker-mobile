@@ -33,8 +33,6 @@ export default function App() {
 
   // DEBUG listen for transition report from loading
   useEffect(() => {
-    console.log('Load transition completion:');
-    console.log(outLoadTransComplete);
   }, [outLoadTransComplete]);
 
 
@@ -50,7 +48,7 @@ export default function App() {
       // DEBUG TIMER
       setTimeout(() => {
         setIsLoaded(true)
-      }, 6000);
+      }, 3000);
 
     }
   }, []);
@@ -79,7 +77,6 @@ export default function App() {
                       // LOADING SCREEN
                       // Changing isLoaded to true will trigger loading end animations
                       // The Loading component will set outLoadTransComplete to true when loading end animations are finished
-                      console.log('LOADING SCREEN');
                       return <Loading isLoaded={isLoaded} reportLoadTransComplete={reportLoadTransComplete}/>
                       
                     } else { // After loading finished, decide next route based on JWT status
@@ -87,7 +84,6 @@ export default function App() {
                         
                         // TODO
                         // LOGIN FORM
-                        console.log('LOGIN SCREEN');
                         return <Login />
                         
                       } else {

@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     trackerText: {
-        color: '#b4bbc2',
+        color: 'lightgray',
         alignSelf: 'flex-end',
     },
     logoText: {

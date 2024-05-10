@@ -85,6 +85,14 @@ export default function Login () {
         }
     }, []);
 
+    // Check if username and password are present, enable login button if so
+    useEffect(() => {
+        if (username && password) {
+            setLoginValid(true);
+        } else {
+            setLoginValid(false);
+        }
+    }, [username, password]);
 
     // == FUNCTIONS
 

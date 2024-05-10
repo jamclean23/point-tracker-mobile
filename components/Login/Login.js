@@ -38,7 +38,10 @@ export default function Login () {
     // Login form fields
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    // Login submit state
     const [loginValid, setLoginValid] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Refs to elements
     const reqScrollviewRef = useRef();
@@ -87,7 +90,7 @@ export default function Login () {
 
     // Check if username and password are present, enable login button if so
     useEffect(() => {
-        if (username && password) {
+        if (username && password && !isSubmitting) {
             setLoginValid(true);
         } else {
             setLoginValid(false);
@@ -134,6 +137,23 @@ export default function Login () {
 
     function handleToLoginPagePress () {
         handlePageChange('login');
+    }
+
+    async function handleLoginSubmitPress () {
+        setIsSubmitting(true);
+        setLoginValid(false);
+
+        // DO LOGIN THINGS HERE TODO
+
+        // DEBUG SLEEP
+        await (() => {
+            return new Promise((resolve) => {
+                setTimeout(resolve, 3000);
+            });
+        })()
+
+        setIsSubmitting(false);
+        setLoginValid(true);
     }
 
     // TextInput handlers
@@ -343,6 +363,7 @@ export default function Login () {
                                     value={username} 
                                     onChangeText={(text) => handleUsernameChange(text)}
                                     placeholder='Username'
+                                    editable={!isSubmitting}
                                 />
                             </View>
 
@@ -354,6 +375,7 @@ export default function Login () {
                                     value={password} 
                                     onChangeText={(text) => handlePasswordChange(text)}secureTextEntry={true}
                                     placeholder='Password'
+                                    editable={!isSubmitting}
                                 />
                             </View>
 
@@ -366,7 +388,9 @@ export default function Login () {
                                             ? {...styles.defaultBtn}
                                             : {...styles.defaultBtn, ...styles.disabledBtn}
                                         }
-                                        disabled={!loginValid}>
+                                        disabled={!loginValid}
+                                        onPress={handleLoginSubmitPress}
+                                    >
                                         <Text style={{...styles.defaultBtnText}}>Login</Text>
                                     </TouchableOpacity>
                                 </View>

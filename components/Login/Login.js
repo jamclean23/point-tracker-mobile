@@ -40,6 +40,9 @@ export default function Login () {
     const [password, setPassword] = useState('');
     const [loginValid, setLoginValid] = useState(false);
 
+    // Refs to elements
+    const reqScrollviewRef = useRef();
+
     // Request Access form fields
     const [newUsername, setNewUsername] = useState('');
     const [newUsernameErr, setNewUsernameErr] = useState('');
@@ -57,7 +60,7 @@ export default function Login () {
     const [phoneNumErr, setPhoneNumErr] = useState('');
     const [notes, setNotes] = useState('');
     const [notesErr, setNotesErr] = useState('');
-    const [requestValid, setRequestValid] = useState(false);
+    const [requestSubmitEnabled, setRequestSubmitEnabled] = useState(true); // Used for disabling submit button
 
     // Animations
     const opacAnim = useRef(new Animated.Value(0)).current;
@@ -139,67 +142,165 @@ export default function Login () {
 
     // REQUEST ACCESS
 
+    async function handleRequestSubmitPress () {
+
+        const valid = validateAll();
+
+        if (valid) {
+            setRequestSubmitEnabled(false);
+            // SUBMIT FORM HERE
+
+            // DEBUG SLEEP
+            await (async () => {
+                return new Promise((resolve) =>{
+                    setTimeout(resolve, 2000);
+                });
+            })();
+
+            setRequestSubmitEnabled(true);
+        } else {
+            reqScrollTop();
+        }
+    }
+
+    function validateAll () {
+        const results = [
+            handleNewUsernameChange(newUsername),
+            handleNewPasswordChange(newPassword),
+            handleConfirmPasswordChange(confirmPassword),
+            handleFirstNameChange(firstName),
+            handleLastNameChange(lastName),
+            handleEmailChange(email),
+            handlePhoneNumChange(phoneNum),
+            handleNotesChange(notes)
+        ]
+
+        let valid = true;
+
+        results.forEach((result) => {
+            if (result && result.length) {
+                valid = false;
+            }
+        });
+
+        return valid;
+    }
+
+    function reqScrollTop () {
+        reqScrollviewRef.current.scrollTo({y: 0, animated: true});
+    }
+
     function handleNewUsernameChange (text) {
         const errors = Validate.username(text);
 
-        errors.length
-            ? setNewUsernameErr(errors[0])
-            : setNewUsernameErr('');
-
         setNewUsername(text);
+
+        if (errors.length) {
+            setNewUsernameErr(errors[0]);
+            return errors;
+        } else {
+            setNewUsernameErr('');
+        }
+
     }
 
     function handleNewPasswordChange (text) {
         const errors = Validate.password(text);
-
-        errors.length
-            ? setNewPasswordErr(errors[0])
-            : setNewPasswordErr('')
-
+        
         setNewPassword(text)
         setConfirmPassword('');
+
+        if (errors.length) {
+            setNewPasswordErr(errors[0]);
+            return errors;
+        } else {
+            setNewPasswordErr('');
+        }
     }
 
     function handleConfirmPasswordChange (text) {
         const errors = Validate.confirmPassword(text, newPassword);
 
-        errors.length
-            ? setConfirmPasswordErr(errors[0])
-            : setConfirmPasswordErr('');
-
         setConfirmPassword(text);
+
+        if (errors.length) {
+            setConfirmPasswordErr(errors[0]);
+            return errors;
+        } else {
+            setConfirmPasswordErr('');
+        }
     }
 
     function handleFirstNameChange (text) {
         const errors = Validate.name(text);
 
-        errors.length
-            ? setFirstNameErr(errors[0])
-            : setFirstNameErr('')
-        
         setFirstName(text);
+
+
+        if (errors.length) {
+            setFirstNameErr(errors[0]);
+            return errors;
+        } else {
+            setFirstNameErr('');
+        }
+        
     }
 
     function handleLastNameChange (text) {
         const errors = Validate.name(text);
 
-        errors.length
-            ? setLastNameErr(errors[0])
-            : setLastNameErr('')
-
         setLastName(text);
+
+        if (errors.length) {
+            setLastNameErr(errors[0]);
+            return errors;
+        } else {
+            setLastNameErr('');
+        }
+
     }
 
     function handleEmailChange (text) {
+        const errors = Validate.email(text);
+
         setEmail(text);
+
+        if (errors.length) {
+            setEmailErr(errors[0]);
+            return errors;
+        } else {
+            setEmailErr('');
+        }
+
     }
 
     function handlePhoneNumChange (text) {
-        setPhoneNum(text);
+        const onlyDigits = text.replaceAll(/\D/g, '');
+        const errors = Validate.phone(onlyDigits, {required: false});
+
+        setPhoneNum(onlyDigits);
+
+        if (errors.length) {
+            setPhoneNumErr(errors[0]);
+            return errors;
+        } else {
+            setPhoneNumErr('');
+        }
+
     }
 
     function handleNotesChange (text) {
+        const errors = Validate.note(text);
+
         setNotes(text);
+
+        if (errors.length) {
+            setNotesErr(errors[0]);
+            return errors;
+        } else {
+            setNotesErr('');
+        }
+
     }
 
     // == RENDER
@@ -301,7 +402,7 @@ export default function Login () {
 
                     {/* Scrollable Form */}
                     <View style={{...styles.reqAccScrollWrapper}}>
-                        <ScrollView style={{...styles.scrollReqAccForm }}>
+                        <ScrollView style={{...styles.scrollReqAccForm }} ref={reqScrollviewRef}>
     
                             {/* Description */}
                             <Text style={{...styles.descriptionText}}>
@@ -312,7 +413,7 @@ export default function Login () {
 
                             {/* New Username */}
                             <View style={{...styles.inputWrapper}}>
-                                <Text style={{...styles.formLabel}}>Username</Text>
+                                <Text style={{...styles.formLabel}}>Username *</Text>
                                 <TextInput 
                                     style={{...styles.formInput}} 
                                     value={newUsername} 
@@ -324,7 +425,7 @@ export default function Login () {
 
                             {/* New Password */}
                             <View style={{...styles.inputWrapper}}>
-                                <Text style={{...styles.formLabel}}>Set Password</Text>
+                                <Text style={{...styles.formLabel}}>Set Password *</Text>
                                 <TextInput  
                                     style={{...styles.formInput}} 
                                     value={newPassword} 
@@ -337,7 +438,7 @@ export default function Login () {
 
                             {/* Confirm Password */}
                             <View style={{...styles.inputWrapper}}>
-                                <Text style={{...styles.formLabel}}>Confirm Password</Text>
+                                <Text style={{...styles.formLabel}}>Confirm Password *</Text>
                                 <TextInput 
                                     style={{...styles.formInput}} 
                                     value={confirmPassword} 
@@ -349,7 +450,7 @@ export default function Login () {
 
                             {/* First Name */}
                             <View style={{...styles.inputWrapper}}>
-                                <Text style={{...styles.formLabel}}>First Name</Text>
+                                <Text style={{...styles.formLabel}}>First Name *</Text>
                                 <TextInput 
                                     style={{...styles.formInput}} 
                                     value={firstName} 
@@ -361,7 +462,7 @@ export default function Login () {
 
                             {/* Last Name */}
                             <View style={{...styles.inputWrapper}}>
-                                <Text style={{...styles.formLabel}}>Last Name</Text>
+                                <Text style={{...styles.formLabel}}>Last Name *</Text>
                                 <TextInput 
                                     style={{...styles.formInput}} 
                                     value={lastName} 
@@ -373,7 +474,7 @@ export default function Login () {
 
                             {/* Email */}
                             <View style={{...styles.inputWrapper}}>
-                                <Text style={{...styles.formLabel}}>Email</Text>
+                                <Text style={{...styles.formLabel}}>Email *</Text>
                                 <TextInput 
                                     style={{...styles.formInput}} 
                                     value={email} 
@@ -414,11 +515,12 @@ export default function Login () {
                                 <View style={{...styles.defaultBtnWrapper, ...styles.loginBtnWrapper}}>
                                     <TouchableOpacity 
                                         style={                                            
-                                            loginValid 
+                                            requestSubmitEnabled 
                                                 ? {...styles.defaultBtn}
                                                 : {...styles.defaultBtn, ...styles.disabledBtn}
                                         }
-                                        disabled={!requestValid}
+                                        disabled={!requestSubmitEnabled}
+                                        onPress={handleRequestSubmitPress}
                                     >
                                         <Text style={{...styles.defaultBtnText}}>Submit Request</Text>
                                     </TouchableOpacity>

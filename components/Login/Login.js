@@ -20,6 +20,10 @@ import {
 // Expo
 import { Ionicons } from '@expo/vector-icons';
 
+// Functions 
+import sleep from '../../shared/functions/sleep';
+import attemptLogin from '../../shared/functions/attemptLogin';
+
 // From validation
 import Validate from './functions/Validate';
 
@@ -145,12 +149,9 @@ export default function Login () {
 
         // DO LOGIN THINGS HERE TODO
 
-        // DEBUG SLEEP
-        await (() => {
-            return new Promise((resolve) => {
-                setTimeout(resolve, 3000);
-            });
-        })()
+        await attemptLogin();
+
+        // await sleep(5000);
 
         setIsSubmitting(false);
         setLoginValid(true);

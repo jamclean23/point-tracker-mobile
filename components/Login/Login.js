@@ -12,7 +12,8 @@ import {
     View, 
     Text, 
     TextInput, 
-    ScrollView, 
+    ScrollView,
+    Alert,
     TouchableOpacity, 
     TouchableWithoutFeedback 
 } from 'react-native';
@@ -194,6 +195,7 @@ export default function Login () {
             } catch (err) {
                 console.log('Error in "Request Account" request.');
                 console.log(err);
+                Alert.alert('Connection Error', 'Unable to complete your request. Please check your internet connection, or contact an administrator.', )
             }
 
             // DEBUG SLEEP

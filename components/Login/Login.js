@@ -23,6 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 // Functions 
 import sleep from '../../shared/functions/sleep';
 import attemptLogin from '../../shared/functions/attemptLogin';
+import attemptCreateAccount from '../../shared/functions/attemptCreateAccount';
 
 // From validation
 import Validate from './functions/Validate';
@@ -149,7 +150,11 @@ export default function Login () {
 
         // DO LOGIN THINGS HERE TODO
 
-        await attemptLogin();
+        try {// TODO handle error/success msg handling
+            await attemptLogin(username, password);
+        } catch (err) {
+            console.log(err);
+        }
 
         // await sleep(5000);
 
@@ -171,24 +176,59 @@ export default function Login () {
 
     // REQUEST ACCESS
 
+    function distributeServerMessages (errors) {
+        console.log(errors);
+    }
+
     async function handleRequestSubmitPress () {
 
         const valid = validateAll();
 
         if (valid) {
             setRequestSubmitEnabled(false);
-            // SUBMIT FORM HERE
+
+            // SUBMIT FORM HERE TODO
+
+            try {
+                await submitRequestAccount();
+            } catch (err) {
+                console.log('Error in "Request Account" request.');
+                console.log(err);
+            }
 
             // DEBUG SLEEP
-            await (async () => {
-                return new Promise((resolve) =>{
-                    setTimeout(resolve, 2000);
-                });
-            })();
+            // await sleep(3000);
 
             setRequestSubmitEnabled(true);
         } else {
             reqScrollTop();
+        }
+    }
+
+    async function submitRequestAccount () {
+        let result = {};
+        try { // TODO handle error/success msg handling
+
+            const response = await attemptCreateAccount(
+                newUsername,
+                newPassword,
+                confirmPassword,
+                firstName,
+                lastName,
+                email,
+                phoneNum,
+                notes
+            );
+
+            result = await response.json();
+            
+        } catch(err) {
+            console.log(err);
+            throw new Error(err);
+        }
+
+        if ('errors' in result) {
+            distributeServerMessages(result.errors);
         }
     }
 

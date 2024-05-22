@@ -43,7 +43,14 @@ export default function Login () {
 
     // Login form fields
     const [username, setUsername] = useState('');
+    const [usernameErr, setUsernameErr] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordErr, setPasswordErr] = useState('');
+
+    const loginErrSetters = {
+        usernameErr: setUsernameErr,
+        passwordErr: setPasswordErr
+    }
 
     // Login submit state
     const [loginValid, setLoginValid] = useState(false);
@@ -163,6 +170,38 @@ export default function Login () {
 
         // DO LOGIN THINGS HERE TODO
 
+        let loginResult = {};
+        if (username && password) {
+            loginResult = await submitLogin();
+        }
+
+        if (loginResult && typeof loginResult === 'object') {
+            if ('errors' in loginResult) {
+                distributeLoginServerMessages(loginResult.errors);
+            }
+        }
+
+        // await sleep(5000);
+
+        setIsSubmitting(false);
+        setLoginValid(true);
+    }
+
+    function distributeLoginServerMessages (errors) {
+        // Fail conditions
+        if (!Array.isArray(errors)) {
+            return;
+        }
+
+        errors.forEach((error, index) => {
+            if ('field' in error && 'message' in error) {
+                // Update error state for designated field
+                loginErrSetters[error.field](error.message);
+            }
+        });
+    }
+
+    async function submitLogin () {
         try {// TODO handle error/success msg handling
             await attemptLogin(username, password);
         } catch (err) {
@@ -170,11 +209,6 @@ export default function Login () {
             console.log(err);
             Alert.alert('Connection Error', 'Unable to complete your request. Please check your internet connection, or contact an administrator.', )
         }
-
-        // await sleep(5000);
-
-        setIsSubmitting(false);
-        setLoginValid(true);
     }
 
     // TextInput handlers
@@ -214,7 +248,7 @@ export default function Login () {
         if (valid) {
             setRequestSubmitEnabled(false);
 
-            // SUBMIT FORM HERE TODO
+            // SUBMIT FORM HERE
 
             let fetchResult;
 
@@ -243,7 +277,7 @@ export default function Login () {
 
     async function submitRequestAccount () {
         let result = {};
-        try { // TODO handle error/success msg handling
+        try {
 
             result = await attemptCreateAccount(
                 newUsername,
@@ -438,6 +472,7 @@ export default function Login () {
                                     placeholder='Username'
                                     editable={!isSubmitting}
                                 />
+                                <Text style={{...styles.formErr}}>{usernameErr}</Text>
                             </View>
 
                             {/* Password */}
@@ -450,6 +485,7 @@ export default function Login () {
                                     placeholder='Password'
                                     editable={!isSubmitting}
                                 />
+                                <Text style={{...styles.formErr}}>{passwordErr}</Text>
                             </View>
 
                             {/* Login Button */}
@@ -694,7 +730,7 @@ const styles = StyleSheet.create({
     },
     inputWrapper: {
         alignItems: 'stretch',
-        gap: 10,
+        gap: 5,
         marginVertical: 5
     },
     formLabel: {

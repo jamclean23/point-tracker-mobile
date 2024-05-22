@@ -71,6 +71,18 @@ export default function Login () {
     const [notesErr, setNotesErr] = useState('');
     const [requestSubmitEnabled, setRequestSubmitEnabled] = useState(true); // Used for disabling submit button
 
+    // Setters for handling server messages
+    const reqAccessErrSetters = {
+        newUsername: setNewUsernameErr,
+        newPassword: setNewPasswordErr,
+        confirmPassword: setConfirmPasswordErr,
+        firstName: setFirstNameErr,
+        lastName: setLastNameErr,
+        email: setEmailErr,
+        phoneNum: setPhoneNumErr,
+        notes: setNotesErr
+    }
+
     // Animations
     const opacAnim = useRef(new Animated.Value(0)).current;
     const opacDuration = 2000;
@@ -154,7 +166,9 @@ export default function Login () {
         try {// TODO handle error/success msg handling
             await attemptLogin(username, password);
         } catch (err) {
+            console.log('Error in "Login" request');
             console.log(err);
+            Alert.alert('Connection Error', 'Unable to complete your request. Please check your internet connection, or contact an administrator.', )
         }
 
         // await sleep(5000);
@@ -177,8 +191,20 @@ export default function Login () {
 
     // REQUEST ACCESS
 
-    function distributeServerMessages (errors) {
-        console.log(errors);
+    function distributeRequestServerMessages (errors) {
+
+        // Fail conditions
+        if (!Array.isArray(errors)){
+            return;
+        }
+
+        // Loop over errors and update to state
+        errors.forEach((error, index) => {
+            if ('field' in error && 'message' in error) {
+                // Update error state for designated field
+                reqAccessErrSetters[error.field](error.message);
+            }
+        });
     }
 
     async function handleRequestSubmitPress () {
@@ -190,12 +216,20 @@ export default function Login () {
 
             // SUBMIT FORM HERE TODO
 
+            let fetchResult;
+
             try {
-                await submitRequestAccount();
+                fetchResult = await submitRequestAccount();
             } catch (err) {
                 console.log('Error in "Request Account" request.');
                 console.log(err);
                 Alert.alert('Connection Error', 'Unable to complete your request. Please check your internet connection, or contact an administrator.', )
+            }
+
+            if (fetchResult && typeof fetchResult === 'object') {
+                if ('errors' in fetchResult) {
+                    distributeRequestServerMessages(fetchResult.errors);
+                }
             }
 
             // DEBUG SLEEP
@@ -211,7 +245,7 @@ export default function Login () {
         let result = {};
         try { // TODO handle error/success msg handling
 
-            const response = await attemptCreateAccount(
+            result = await attemptCreateAccount(
                 newUsername,
                 newPassword,
                 confirmPassword,
@@ -221,17 +255,13 @@ export default function Login () {
                 phoneNum,
                 notes
             );
-
-            result = await response.json();
             
         } catch(err) {
             console.log(err);
             throw new Error(err);
         }
 
-        if ('errors' in result) {
-            distributeServerMessages(result.errors);
-        }
+        return result;
     }
 
     function validateAll () {

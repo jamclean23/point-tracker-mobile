@@ -25,7 +25,6 @@ export default async function attemptCreateAccount (
     const signal = controller.signal;
     const id = setTimeout(() => controller.abort(), 8000);
     try {
-
         const response = await fetch(`${process.env.SERVER_DOMAIN}/auth/create`, {
             headers: {
                 "Content-Type": "application/json"
@@ -43,13 +42,11 @@ export default async function attemptCreateAccount (
             }),
             signal
         });
-        clearTimeout(id);
         const result = await response.json();
-        console.log(result);
+        clearTimeout(id);
         return result;
     } catch (err) { 
         clearTimeout(id);
-        console.log(err);
         throw new Error(err);
     }
 

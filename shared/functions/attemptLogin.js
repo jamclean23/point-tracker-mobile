@@ -11,8 +11,10 @@ export default async function attemptLogin (username, password) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                username,
-                password
+                user: {
+                    username,
+                    password
+                }
             }),
             signal
         });

@@ -25,6 +25,7 @@ import { Ionicons } from '@expo/vector-icons';
 import sleep from '../../shared/functions/sleep';
 import attemptLogin from '../../shared/functions/attemptLogin';
 import attemptCreateAccount from '../../shared/functions/attemptCreateAccount';
+import saveToken from '../../shared/functions/saveToken';
 
 // From validation
 import Validate from './functions/Validate';
@@ -47,6 +48,13 @@ export default function Login () {
     const [password, setPassword] = useState('');
     const [passwordErr, setPasswordErr] = useState('');
 
+    // Setters for clearing fields
+    const loginFieldSetters = {
+        username: setUsername,
+        password: setPassword
+    }
+
+    // Setter for error handling
     const loginErrSetters = {
         usernameErr: setUsernameErr,
         passwordErr: setPasswordErr
@@ -77,6 +85,18 @@ export default function Login () {
     const [notes, setNotes] = useState('');
     const [notesErr, setNotesErr] = useState('');
     const [requestSubmitEnabled, setRequestSubmitEnabled] = useState(true); // Used for disabling submit button
+
+    // Setter for field clearing
+    const requestFieldSetters = {
+        newUsername: setNewUsername,
+        newPassword: setNewPassword,
+        confirmPassword: setConfirmPassword,
+        firstName: setFirstName,
+        lastName: setLastName,
+        email: setEmail,
+        phoneNum: setPhoneNum,
+        notes: setNotes
+    }
 
     // Setters for handling server messages
     const reqAccessErrSetters = {
@@ -122,7 +142,21 @@ export default function Login () {
         }
     }, [username, password]);
 
+
     // == FUNCTIONS
+
+    function clearInputs () {
+
+        // Clear login fields
+        for (const loginFieldSetter in loginFieldSetters) {
+            loginFieldSetters[loginFieldSetter]('');
+        }
+
+        // Clear request form fields
+        for (const requestFieldSetter in requestFieldSetters) {
+            requestFieldSetters[requestFieldSetter]('');
+        }
+    }
 
     function handleInAnimations (duration = opacDuration) {
         Animated.timing(opacAnim, {
@@ -168,20 +202,31 @@ export default function Login () {
         setIsSubmitting(true);
         setLoginValid(false);
 
-        // DO LOGIN THINGS HERE TODO
+        // DO LOGIN THINGS HERE
 
+        // Submit credentials in exchange for JWT
         let loginResult = {};
         if (username && password) {
             loginResult = await submitLogin();
         }
 
         if (loginResult && typeof loginResult === 'object') {
-            if ('errors' in loginResult) {
+            if ('errors' in loginResult) { // Distribute errors
                 distributeLoginServerMessages(loginResult.errors);
+            } else if ('token' in loginResult) { // Or save the token
+                let result = {};
+
+                try {
+                    result = await saveToken(loginResult.token);
+                } catch (err) {
+                    console.log(err);
+                }
+
+                if ('error' in result) {
+                    console.log(error);
+                }
             }
         }
-
-        // await sleep(5000);
 
         setIsSubmitting(false);
         setLoginValid(true);
@@ -203,7 +248,7 @@ export default function Login () {
 
     async function submitLogin () {
         try {// TODO handle error/success msg handling
-            await attemptLogin(username, password);
+            return await attemptLogin(username, password);
         } catch (err) {
             console.log('Error in "Login" request');
             console.log(err);
@@ -248,7 +293,7 @@ export default function Login () {
         if (valid) {
             setRequestSubmitEnabled(false);
 
-            // SUBMIT FORM HERE
+            // SUBMIT REQUEST ACCESS FORM HERE
 
             let fetchResult;
 
@@ -263,6 +308,10 @@ export default function Login () {
             if (fetchResult && typeof fetchResult === 'object') {
                 if ('errors' in fetchResult) {
                     distributeRequestServerMessages(fetchResult.errors);
+                } else {
+                    Alert.alert('Request Submitted', 'Your request for an account has been successfully submitted. You will receive an email when the account is approved by an administrator.')
+                    clearInputs();
+                    handlePageChange('login');
                 }
             }
 

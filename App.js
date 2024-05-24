@@ -12,6 +12,9 @@ import Loading from './components/Loading/loading';
 import InitScreen from './components/InitScreen/InitScreen';
 import Login from './components/Login/Login';
 
+// Functions
+import retrieveToken from './shared/functions/retrieveToken';
+
 
 // ====== FUNCTIONS ======
 
@@ -25,7 +28,7 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState('init');
 
   // Auth
-  const [userJwt, setUserJwt] = useState();
+  const [userToken, setUserToken] = useState('');
   const [userValid, setUserValid] = useState(false);
 
 
@@ -41,25 +44,40 @@ export default function App() {
     if (!renderCounter.current) {
       renderCounter.current++;
 
-      // TODO Find json web token and store in state
-
-      // TODO fetch request to validate, update validity in state
-
-      // DEBUG TIMER
-      setTimeout(() => {
-        setIsLoaded(true)
-      }, 3000);
-
+      handleLoad();
+      
     }
   }, []);
-
-
+  
+  
   // == Functions
-
+  
   function reportLoadTransComplete () {
     setOutLoadTransComplete(true);
   }
+  
+  async function handleLoad () {
 
+    let result = {};
+
+    try {
+      result = await retrieveToken();
+    } catch (err) {
+      console.log(err);
+    }
+
+    if ('token' in result && result.token) {
+      setUserToken(result.token);
+      console.log('USER TOKEN:', '\n', result.token);
+    } else {
+      console.log('NO TOKEN FOUND');
+    }
+
+    // DEBUG TIMER
+    setTimeout(() => {
+      setIsLoaded(true)
+    }, 3000);
+  }
 
   // == Render
     return (

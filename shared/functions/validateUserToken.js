@@ -1,0 +1,1 @@
+// Submits the jwt to the server

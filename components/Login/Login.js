@@ -240,14 +240,19 @@ export default function Login () {
 
         errors.forEach((error, index) => {
             if ('field' in error && 'message' in error) {
-                // Update error state for designated field
-                loginErrSetters[error.field](error.message);
+                if (error.field === 'serverMsg') {
+                    Alert.alert('Login Failed', error.message);
+                } else {
+                    // Update error state for designated field
+                    loginErrSetters[error.field](error.message);
+                }
             }
         });
     }
 
     async function submitLogin () {
         try {// TODO handle error/success msg handling
+            
             return await attemptLogin(username, password);
         } catch (err) {
             console.log('Error in "Login" request');

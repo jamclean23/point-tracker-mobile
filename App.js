@@ -4,7 +4,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
 // Components
@@ -14,122 +14,162 @@ import Login from './components/Login/Login';
 
 // Functions
 import retrieveToken from './shared/functions/retrieveToken';
+import deleteToken from './shared/functions/deleteToken';
+import validateUserToken from './shared/functions/validateUserToken';
 
 
 // ====== FUNCTIONS ======
 
 export default function App() {
 
-  // == State
+    // == State
 
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [outLoadTransComplete, setOutLoadTransComplete] = useState(false);
-  const renderCounter = useRef(0);
-  const [currentScreen, setCurrentScreen] = useState('init');
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [outLoadTransComplete, setOutLoadTransComplete] = useState(false);
+    const [outLoginTransComplete, setOutLoginTransComplete] = useState(false);
+    const renderCounter = useRef(0);
+    const [currentScreen, setCurrentScreen] = useState('init');
 
-  // Auth
-  const [userToken, setUserToken] = useState('');
-  const [userValid, setUserValid] = useState(false);
-
-
-  // == Use Effect
-
-  // DEBUG listen for transition report from loading
-  useEffect(() => {
-  }, [outLoadTransComplete]);
+    // Auth
+    const [userToken, setUserToken] = useState('');
+    const [userValid, setUserValid] = useState(false);
+    const [user, setUser] = useState();
 
 
-  // Load events
-  useEffect(() => {
-    if (!renderCounter.current) {
-      renderCounter.current++;
 
-      handleLoad();
-      
+    // == Use Effect
+
+    // DEBUG listen for transition report from loading
+    useEffect(() => {
+    }, [outLoadTransComplete]);
+
+
+    // Load events
+    useEffect(() => {
+        if (!renderCounter.current) {
+            renderCounter.current++;
+            handleLoad();
+        }
+    }, []);
+    
+    
+    // == Functions
+    
+    function reportLoadTransComplete () {
+        setOutLoadTransComplete(true);
     }
-  }, []);
-  
-  
-  // == Functions
-  
-  function reportLoadTransComplete () {
-    setOutLoadTransComplete(true);
-  }
-  
-  async function handleLoad () {
-
-    let result = {};
-
-    try {
-      result = await retrieveToken();
-    } catch (err) {
-      console.log(err);
+    
+    function reportLoginTransComplete () {
+        setOutLoginTransComplete(true);
+        resetState();
+        handleLoad();
     }
 
-    if ('token' in result && result.token) {
-      setUserToken(result.token);
-      console.log('USER TOKEN:', '\n', result.token);
-    } else {
-      console.log('NO TOKEN FOUND');
+    function resetState () {
+        setIsLoaded(false);
+        setOutLoadTransComplete(false);
+        setOutLoginTransComplete(false);
+        renderCounter.current = 0;
+        setCurrentScreen('init')
+        setUserToken('');
+        setUserValid(false);
+        setUser();
     }
 
-    // DEBUG TIMER
-    setTimeout(() => {
-      setIsLoaded(true)
-    }, 3000);
-  }
+    async function handleLoad () {
+        console.log('LOADING');
+        let result = {};    
 
-  // == Render
-    return (
-      <View style={styles.mainWrapper}>
-        {(() => { 
-          switch (currentScreen) {
-
-            // INITALIZATION SCREEN
-            // Includes loading and login, proceeds to main screen after login
-            case 'init':
-              return <InitScreen>
-                  {(() => {
-                    if (!outLoadTransComplete) { // If the loading screen hasn't reported it's finished, render it
-                      
-                      // LOADING SCREEN
-                      // Changing isLoaded to true will trigger loading end animations
-                      // The Loading component will set outLoadTransComplete to true when loading end animations are finished
-                      return <Loading isLoaded={isLoaded} reportLoadTransComplete={reportLoadTransComplete}/>
-                      
-                    } else { // After loading finished, decide next route based on JWT status
-                      if (!userValid) { // User validation was unsuccessful, proceed to login form
-                        
-                        // TODO
-                        // LOGIN FORM
-                        return <Login />
-                        
-                      } else {
-                        
-                        // TODO
-                        // DISPLAY MAIN APP
-                        // Set current screen to main
-                      }
+        try {
+            result = await retrieveToken();
+        } catch (err) {
+            console.log(err);
+        }
+        if ('token' in result && result.token) {
+            setUserToken(result.token);
+            console.log('USER TOKEN:', '\n', result.token);
+            try {
+                const validationResult    = await validateUserToken(result.token);
+                
+                // Set the user and user validity 
+                if (validationResult && 'user' in validationResult) {
+                        setUserValid(true);
+                        setUser(validationResult.user);
+                        console.log(validationResult);
+                } else {
+                    // If the validation attempt did not return a user, delete the token. This will force the client to request a new jwt.
+                    try {
+                        await deleteToken();
+                    } catch (err) {
+                        console.log(err);
                     }
-                  })()}
-                </InitScreen>
+                }
 
-            // MAIN SCREEN
-            case 'main':
-              return
-          }
-        })()}
-      </View>
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            console.log('NO TOKEN FOUND');
+        }
 
-    );
-  }
+
+        // DEBUG TIMER
+        setTimeout(() => {
+            setIsLoaded(true)
+        }, 1000);
+    }
+
+    // == Render
+        return (
+            <View style={styles.mainWrapper}>
+                {(() => { 
+                    switch (currentScreen) {
+
+                        // INITALIZATION SCREEN
+                        // Includes loading and login, proceeds to main screen after login
+                        case 'init':
+                            return <InitScreen>
+                                    {(() => {
+                                        if (!outLoadTransComplete) { // If the loading screen hasn't reported it's finished, render it
+                                            
+                                            // LOADING SCREEN
+                                            // Changing isLoaded to true will trigger loading end animations
+                                            // The Loading component will set outLoadTransComplete to true when loading end animations are finished
+                                            return <Loading isLoaded={isLoaded} reportLoadTransComplete={reportLoadTransComplete}/>
+                                            
+                                        } else { // After loading finished, decide next route based on JWT status
+                                            if (!userValid) { // User validation was unsuccessful, proceed to login form
+                                                
+                                                // TODO
+                                                // LOGIN FORM
+                                                return <Login reportLoginTransComplete={reportLoginTransComplete}/>
+                                                
+                                            } else {
+                                                
+                                                // TODO
+                                                // DISPLAY MAIN APP
+                                                // Set current screen to main
+                                            }
+                                        }
+                                    })()}
+                                </InitScreen>
+
+                        // MAIN SCREEN
+                        case 'main':
+                            return
+                    }
+                })()}
+            </View>
+
+        );
+    }
 
 
 // ====== STYLES ======
 
 const styles = StyleSheet.create({
-  mainWrapper: {
-    height: '100%',
-    width: '100%'
-  }
+    mainWrapper: {
+        height: '100%',
+        width: '100%'
+    }
 });

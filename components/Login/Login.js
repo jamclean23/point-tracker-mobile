@@ -33,7 +33,7 @@ import Validate from './functions/Validate';
 
 // ====== FUNCTIONS ======
 
-export default function Login () {
+export default function Login (props) {
 
     // == STATE
 
@@ -218,6 +218,8 @@ export default function Login () {
 
                 try {
                     result = await saveToken(loginResult.token);
+                    await handleOutAnimations();
+                    props.reportLoginTransComplete(true);
                 } catch (err) {
                     console.log(err);
                 }

@@ -16,7 +16,7 @@ export default function Loading (props) {
     // Logo text translate animation
     const textAnim = useRef(new Animated.Value(1)).current; // Amount logo text will be offset at start of animation
 
-    const textAnimDuration = 2000;
+    const textAnimDuration = 1500;
 
     const pointTextAmount = textAnim.interpolate({
         inputRange: [0, 1],

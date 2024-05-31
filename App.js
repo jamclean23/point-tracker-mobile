@@ -27,6 +27,7 @@ export default function App() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [outLoadTransComplete, setOutLoadTransComplete] = useState(false);
     const [outLoginTransComplete, setOutLoginTransComplete] = useState(false);
+    const [outInitTransComplete, setOutInitTransComplete] = useState(false);
     const renderCounter = useRef(0);
     const [currentScreen, setCurrentScreen] = useState('init');
     const [shouldShowInit, setShouldShowInit] = useState(true);
@@ -48,6 +49,17 @@ export default function App() {
             handleLoad();
         }
     }, []);
+
+    // InitScreen out transitions complete
+    useEffect(() => {
+
+        // Once transition complete, set main as the new page and reset state
+        if (outInitTransComplete) {
+            setCurrentScreen('main');
+            setOutInitTransComplete(false);
+        }
+
+    }, [outInitTransComplete]);
 
     
     // == Functions
@@ -71,7 +83,8 @@ export default function App() {
         setUserToken('');
         setUserValid(false);
         setUser();
-        setShouldShowInit(false);
+        setShouldShowInit(true);
+        setOutInitTransComplete(false);
     }
 
     async function handleLoad () {
@@ -126,7 +139,7 @@ export default function App() {
                         // INITALIZATION SCREEN
                         // Includes loading and login, proceeds to main screen after login
                         case 'init':
-                            return <InitScreen setShouldShowInit={setShouldShowInit}>
+                            return <InitScreen shouldShowInit={shouldShowInit} setShouldShowInit={setShouldShowInit} setOutInitTransComplete={setOutInitTransComplete}>
                                     {(() => {
                                         if (!outLoadTransComplete) { // If the loading screen hasn't reported it's finished, render it
                                             

@@ -124,6 +124,7 @@ export default function Login (props) {
 
     // On mount
     useEffect(() => {
+
         // Check for previous render
         if (!renderCounter.current) {
             renderCounter.current++;

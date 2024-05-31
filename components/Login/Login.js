@@ -778,6 +778,11 @@ const styles = StyleSheet.create({
         top: 0,
         bottom: 0
     },
+    backArrowText: {
+        borderColor: 'yellow',
+        borderWidth: 3,
+        fontSize: 36
+    },
     loginScrollWrapper: {
         flex: 1,
     },

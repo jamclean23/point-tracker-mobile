@@ -11,6 +11,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Loading from './components/Loading/loading';
 import InitScreen from './components/InitScreen/InitScreen';
 import Login from './components/Login/Login';
+import MainScreen from './components/MainScreen/MainScreen';
 
 // Functions
 import retrieveToken from './shared/functions/retrieveToken';
@@ -164,7 +165,7 @@ export default function App() {
 
                         // MAIN SCREEN
                         case 'main':
-                            return
+                            return <MainScreen />
                     }
                 })()}
             </View>

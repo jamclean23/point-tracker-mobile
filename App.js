@@ -29,6 +29,7 @@ export default function App() {
     const [outLoginTransComplete, setOutLoginTransComplete] = useState(false);
     const renderCounter = useRef(0);
     const [currentScreen, setCurrentScreen] = useState('init');
+    const [shouldShowInit, setShouldShowInit] = useState(true);
 
     // Auth
     const [userToken, setUserToken] = useState('');
@@ -39,10 +40,6 @@ export default function App() {
 
     // == Use Effect
 
-    // DEBUG listen for transition report from loading
-    useEffect(() => {
-    }, [outLoadTransComplete]);
-
 
     // Load events
     useEffect(() => {
@@ -51,7 +48,7 @@ export default function App() {
             handleLoad();
         }
     }, []);
-    
+
     
     // == Functions
     
@@ -74,6 +71,7 @@ export default function App() {
         setUserToken('');
         setUserValid(false);
         setUser();
+        setShouldShowInit(false);
     }
 
     async function handleLoad () {
@@ -128,7 +126,7 @@ export default function App() {
                         // INITALIZATION SCREEN
                         // Includes loading and login, proceeds to main screen after login
                         case 'init':
-                            return <InitScreen>
+                            return <InitScreen setShouldShowInit={setShouldShowInit}>
                                     {(() => {
                                         if (!outLoadTransComplete) { // If the loading screen hasn't reported it's finished, render it
                                             
@@ -144,11 +142,8 @@ export default function App() {
                                                 // LOGIN FORM
                                                 return <Login reportLoginTransComplete={reportLoginTransComplete}/>
                                                 
-                                            } else {
-                                                
-                                                // TODO
-                                                // DISPLAY MAIN APP
-                                                // Set current screen to main
+                                            } else if (shouldShowInit) {
+                                                setShouldShowInit(false);
                                             }
                                         }
                                     })()}

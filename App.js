@@ -94,7 +94,6 @@ export default function App() {
     }
 
     async function handleLoad () {
-        console.log('LOADING');
         let result = {};    
 
         try {
@@ -104,7 +103,6 @@ export default function App() {
         }
         if ('token' in result && result.token) {
             setUserToken(result.token);
-            console.log('USER TOKEN:', '\n', result.token);
             try {
                 const validationResult    = await validateUserToken(result.token);
                 
@@ -112,7 +110,6 @@ export default function App() {
                 if (validationResult && 'user' in validationResult) {
                         setUserValid(true);
                         setUser(validationResult.user);
-                        console.log(validationResult);
                 } else {
                     // If the validation attempt did not return a user, delete the token. This will force the client to request a new jwt.
                     try {

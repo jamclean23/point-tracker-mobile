@@ -2,10 +2,17 @@
 
 // ====== IMPORTS ======
 
-import React, { useEffect } from "react";
-import { View, Text, Animated, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Animated, TouchableOpacity, Modal, TouchableWithoutFeedback, ScrollView } from "react-native";
 import MapView from "react-native-maps";
 import styles from "./styles";
+
+// Functions
+import handleModalOpenClick from "./functions/handleModalOpenClick";
+import handleModalClose from "./functions/handleModalClose";
+
+// Components
+import Settings from "./modals/Settings";
 
 
 // ====== FUNCTIONS ======
@@ -14,7 +21,13 @@ export default function MainScreen (props) {
 
     // == STATE
 
+    const [showSettings, setShowSettings] = useState(false);
+
     // == USE EFFECT
+
+    // Debug
+    useEffect(() => {
+    }, [showSettings]);
 
     // == RENDER
 
@@ -35,7 +48,7 @@ export default function MainScreen (props) {
 
                 {/* Find new site */}
                 <TouchableOpacity style={{...styles.toolbarBtn}}>
-                    <Text style={{...styles.toolbarText}}>New Site</Text>
+                    <Text style={{...styles.toolbarText}}>Sites</Text>
                 </TouchableOpacity>
 
                 {/* Pick control point in this site */}
@@ -44,11 +57,21 @@ export default function MainScreen (props) {
                 </TouchableOpacity>
 
                 {/* Settings */}
-                <TouchableOpacity style={{...styles.toolbarBtn}}>
+                <TouchableOpacity 
+                    style={{...styles.toolbarBtn}}
+                    onPress={() => {handleModalOpenClick(setShowSettings)}}
+                >
                     <Text style={{...styles.toolbarText}}>Settings</Text>
                 </TouchableOpacity>
 
             </View>
+
+            <Settings 
+                showSettings={showSettings} 
+                setShowSettings={setShowSettings}
+                handleModalClose={handleModalClose}
+                resetApp={props.resetApp} 
+            />
 
         </Animated.View>
     );

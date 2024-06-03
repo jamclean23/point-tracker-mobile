@@ -75,17 +75,22 @@ export default function App() {
         handleLoad();
     }
 
+    function resetApp () {
+        resetState();
+        handleLoad();
+    }
+
     function resetState () {
         setIsLoaded(false);
         setOutLoadTransComplete(false);
         setOutLoginTransComplete(false);
         renderCounter.current = 0;
-        setCurrentScreen('init')
         setUserToken('');
         setUserValid(false);
         setUser();
         setShouldShowInit(true);
         setOutInitTransComplete(false);
+        setCurrentScreen('init')
     }
 
     async function handleLoad () {
@@ -165,7 +170,7 @@ export default function App() {
 
                         // MAIN SCREEN
                         case 'main':
-                            return <MainScreen />
+                            return <MainScreen resetApp={resetApp}/>
                     }
                 })()}
             </View>

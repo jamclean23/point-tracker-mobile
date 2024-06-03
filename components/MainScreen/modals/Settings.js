@@ -3,7 +3,7 @@
 // ====== IMPORTS ======
 
 // React
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Modal, ScrollView } from "react-native";
 
 // Stylesheet
@@ -12,12 +12,19 @@ import styles from "../styles";
 // Functions
 import logoutHandler from "../functions/logoutHandler";
 import deleteAccountHandler from "../functions/deleteAccountHandler";
+import pingHandler from "../functions/pingHandler";
 
 //  ====== COMPONENT ======
 
 export default function Settings (props) {
 
+    // == STATE
+
+    const [pinging, setPinging] = useState(false);
+
+
     // == RENDER
+
     return (
         <Modal
             animationType="slide"
@@ -55,14 +62,34 @@ export default function Settings (props) {
 
                                 {/* Refresh Points */}
                                 <View style={{...styles.modalSettingsGroupBtnWrapper}}>
-                                    <TouchableOpacity style={{...styles.modalBtn}}>
+                                    <TouchableOpacity 
+                                        style={{
+                                            ...styles.modalBtn
+                                        }}
+                                    
+                                    >
                                         <Text style={{...styles.modalBtnText}}>Refresh Points</Text>
                                     </TouchableOpacity>
                                 </View>
 
                                 {/* Connection Test */}
                                 <View style={{...styles.modalSettingsGroupBtnWrapper}}>
-                                    <TouchableOpacity style={{...styles.modalBtn}}>
+                                    <TouchableOpacity 
+                                        style={{
+                                            ...styles.modalBtn,
+                                            ...(()=> {
+                                                if (pinging) {
+                                                    return {
+                                                        backgroundColor: 'gray'
+                                                    }
+                                                } else {
+                                                    return {}
+                                                }
+                                            })() 
+                                        }}
+                                        onPress={() => { pingHandler(setPinging) }}
+                                        disabled={pinging}
+                                    >
                                         <Text style={{...styles.modalBtnText}}>Connection Test</Text>
                                     </TouchableOpacity>
                                 </View>

@@ -3,18 +3,21 @@
 // ====== IMPORTS ======
 
 // React
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, Modal, ScrollView } from "react-native";
 
 // Stylesheet
 import styles from "../styles";
 
-// Handlers
-import logoutBtnHandler from "./functions/logoutBtnHandler";
+// Functions
+import logoutHandler from "../functions/logoutHandler";
+import deleteAccountHandler from "../functions/deleteAccountHandler";
 
 //  ====== COMPONENT ======
 
 export default function Settings (props) {
+
+    // == RENDER
     return (
         <Modal
             animationType="slide"
@@ -75,13 +78,14 @@ export default function Settings (props) {
                             <Text style={{...styles.modalSubHeader}}>Account</Text>
 
                             <View style={{...styles.modalSettingsGroupContent}}>
+
                                 {/* Logout */}
                                 <View 
                                     style={{...styles.modalSettingsGroupBtnWrapper}}
                                 >
                                     <TouchableOpacity 
                                         style={{...styles.modalBtn}}
-                                        onPress={() => {logoutBtnHandler(props.resetApp)}}
+                                        onPress={() => {logoutHandler(props.resetApp)}}
                                     >
                                         <Text style={{...styles.modalBtnText}}>Logout</Text>
                                     </TouchableOpacity>
@@ -89,7 +93,10 @@ export default function Settings (props) {
 
                                 {/* Delete Account */}
                                 <View style={{...styles.modalSettingsGroupBtnWrapper}}>
-                                    <TouchableOpacity style={{...styles.modalBtn}}>
+                                    <TouchableOpacity 
+                                        style={{...styles.modalBtn}}
+                                        onPress={() => {deleteAccountHandler(props.resetApp, props.userToken)}}
+                                    >
                                         <Text style={{...styles.modalBtnText}}>Delete Account</Text>
                                     </TouchableOpacity>
                                 </View>

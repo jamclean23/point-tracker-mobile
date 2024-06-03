@@ -27,7 +27,7 @@ export default function MainScreen (props) {
 
     // Debug
     useEffect(() => {
-    }, [showSettings]);
+    }, [props.userToken]);
 
     // == RENDER
 
@@ -71,6 +71,7 @@ export default function MainScreen (props) {
                 setShowSettings={setShowSettings}
                 handleModalClose={handleModalClose}
                 resetApp={props.resetApp} 
+                userToken={props.userToken}
             />
 
         </Animated.View>

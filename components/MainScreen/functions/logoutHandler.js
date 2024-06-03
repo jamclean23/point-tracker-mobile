@@ -6,8 +6,7 @@
 import { Alert } from "react-native";
 
 // Functions 
-import deleteToken from "../../../shared/functions/deleteToken";
-
+import logout from "../../../shared/functions/logout";
 
 // ====== FUNCTIONS ======
 
@@ -16,7 +15,7 @@ import deleteToken from "../../../shared/functions/deleteToken";
  * @param {Function} appResetter - Callback function called if token is deleted
  * @returns Boolean true if successful or false if failed
  */
-export default function logout (appResetter) {
+export default function logoutHandler (appResetter) {
     Alert.alert('Logout', 'Are you sure you want to logout?', [
         {
             text: 'Cancel',
@@ -24,16 +23,7 @@ export default function logout (appResetter) {
         },
         {
             text: 'Logout',
-            onPress: async () => {
-                try {
-                    await deleteToken();
-                    if (appResetter && typeof appResetter === 'function') {
-                        appResetter();
-                    }
-                } catch (err) {
-                    console.log(err);
-                }
-            }
+            onPress: () => { logout(appResetter)}
         }
     ]);
 

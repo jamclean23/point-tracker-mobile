@@ -170,7 +170,7 @@ export default function App() {
 
                         // MAIN SCREEN
                         case 'main':
-                            return <MainScreen resetApp={resetApp}/>
+                            return <MainScreen userToken={userToken} resetApp={resetApp}/>
                     }
                 })()}
             </View>

@@ -10,6 +10,7 @@ import styles from "./styles";
 // Functions
 import handleModalOpenClick from "./functions/handleModalOpenClick";
 import handleModalClose from "./functions/handleModalClose";
+import renderMapMessages from "./functions/renderMapMessages";
 
 // Components
 import Settings from "./modals/Settings";
@@ -22,6 +23,15 @@ export default function MainScreen (props) {
     // == STATE
 
     const [showSettings, setShowSettings] = useState(false);
+    const [region, setRegion] = useState({
+        latitude: 29.531960001731047,
+        longitude: -98.4955169,
+        latitudeDelta: 30,
+        longitudeDelta: 0
+    });
+    const [sites, setSites] = useState([]);
+    const [currentSite, setCurrentSite] = useState();
+    const [points, setPoints] = useState([]);
 
     // == USE EFFECT
 
@@ -41,18 +51,50 @@ export default function MainScreen (props) {
             </View>
 
             {/* Map */}
-            <MapView style={styles.map}/>
+            <View style={styles.mapContainer}>
+                <MapView 
+                    style={styles.map}
+                    region={region}
+                />
+                <View style={styles.messageContainer}>
+                    {renderMapMessages(currentSite, sites)}
+                </View>
+            </View>
 
             {/* Toolbar */}
             <View style={styles.toolbar}>
 
                 {/* Find new site */}
-                <TouchableOpacity style={{...styles.toolbarBtn}}>
+                <TouchableOpacity 
+                    style={{
+                        ...styles.toolbarBtn,
+                        ...(()=> {
+                            if (sites.length) {
+                                return {}
+                            } else {
+                                return styles.disabledBtn
+                            }
+                        })()
+                    }}
+                    disabled={!sites.length}
+                >
                     <Text style={{...styles.toolbarText}}>Sites</Text>
                 </TouchableOpacity>
 
                 {/* Pick control point in this site */}
-                <TouchableOpacity style={{...styles.toolbarBtn}}>
+                <TouchableOpacity 
+                    style={{
+                        ...styles.toolbarBtn,
+                        ...(() => {
+                            if (points.length) {
+                                return {}
+                            } else {
+                                return styles.disabledBtn
+                            }
+                        })()
+                    }}
+                    disabled={!points.length}
+                >
                     <Text style={{...styles.toolbarText}}>Points</Text>
                 </TouchableOpacity>
 

@@ -25,6 +25,9 @@ export default styles = StyleSheet.create({
     trackerText: {
         color: 'lightgray'
     },
+    mapContainer: {
+        flex: 1
+    },
     map: {
         flex: 1,
     },
@@ -126,6 +129,28 @@ export default styles = StyleSheet.create({
     },
     modalBtnText: {
         color: 'white',
+        fontSize: 18
+    },
+    disabledBtn: {
+        backgroundColor: 'gray'
+    },
+    messageContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        pointerEvents: 'none',
+        alignItems: 'center',
+        width: '100%'
+    },
+    message: {
+        backgroundColor: 'white',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 8,
+        borderColor: 'gray',
+        borderWidth: 1
+    },
+    messageText: {
         fontSize: 18
     }
 });

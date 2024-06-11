@@ -3,8 +3,18 @@
 // ====== IMPORTS ======
 
 // React
-import React, { useState } from "react";
-import { Modal, View, TouchableOpacity, Text, ScrollView, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native";
+import React, { useEffect, useState } from "react";
+import { 
+    Modal, 
+    View, 
+    TouchableOpacity, 
+    Text, 
+    ScrollView, 
+    TextInput, 
+    TouchableWithoutFeedback, 
+    Keyboard, 
+    BackHandler 
+} from "react-native";
 
 // Styling
 import styles from "../../styles";
@@ -15,6 +25,7 @@ import handleSearchTextChange from "./functions/handleSearchTextChange";
 import handleSortBtnPress from "./functions/handleSortBtnPress";
 import handleSortMenuBtnPress from "./functions/handleSortMenuBtnPress";
 import formatSortMethod from "./functions/formatSortMethod";
+
 
 // ====== FUNCTIONS ======
 
@@ -31,8 +42,10 @@ export default function Sites (props) {
     // == RENDER
 
     function SortMenu () {
+     
         return (
-            <View style={styles.sortMenu}>
+            shouldShowSortMenu
+            ? <View style={styles.sortMenu}>
 
                 {/* Subheader */}
                 <Text style={styles.sortMenuSubHeader}>Sort By:</Text>
@@ -53,6 +66,7 @@ export default function Sites (props) {
                     <Text style={styles.sortMenuBtnText}>Client</Text>
                 </TouchableOpacity>
             </View>
+            : ''
         )
     }
 
@@ -61,7 +75,13 @@ export default function Sites (props) {
             animationType="slide"
             visible={props.showSites}
             transparent={true}
-            onRequestClose={() => {props.handleModalClose(props.setShowSites)}}
+            onRequestClose={() => {
+                if (shouldShowSortMenu) {
+                    setShouldShowSortMenu(false);
+                } else {
+                    props.handleModalClose(props.setShowSites)
+                }
+            }}
             style={styles.modal}
         >
             <TouchableWithoutFeedback
@@ -99,11 +119,8 @@ export default function Sites (props) {
                             <Text style={styles.sortBtnText}>↑↓</Text>
                         </TouchableOpacity>
 
-                        {/* Sort Menu */}
-                        {shouldShowSortMenu
-                           ? SortMenu()
-                            : ''
-                        }                        
+                        <SortMenu />
+
                     </View>
                         
                     {/* Sort method info */}

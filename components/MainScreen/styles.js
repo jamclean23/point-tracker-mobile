@@ -60,8 +60,12 @@ export default styles = StyleSheet.create({
 
     },
     modal: {
-        marginVertical: '5%',
-        marginHorizontal: '5%',
+        height: '100%',
+        width: '100%'
+    },
+    modalView: {
+        paddingVertical: '5%',
+        paddingHorizontal: '5%',
         padding: 12,
         flex: 1,
         borderRadius: 8,
@@ -98,7 +102,7 @@ export default styles = StyleSheet.create({
     },
     modalContentWrapper: {
         flex: 1,
-        paddingVertical: 32
+        paddingTop: 8
     },
     modalScrollContent: {
         
@@ -152,5 +156,68 @@ export default styles = StyleSheet.create({
     },
     messageText: {
         fontSize: 18
+    },
+    // Sites Modal
+    siteEntry: {
+        marginBottom: 24,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 8,
+        paddingHorizontal: 32,
+        paddingVertical: 8
+    },
+    opText: {
+        textAlign: 'center',
+        marginBottom: 8,
+        fontWeight: 'bold'
+        },
+    sortMethodInfo: {
+        paddingVertical: 8,
+        borderBottomWidth: 1,
+        borderColor: 'gray'
+    },
+    // Sites searchbar
+    searchBarWrapper: {
+        flexDirection: 'row',
+    },
+    sitesSearchInput: {
+        borderWidth: 1,
+        borderColor: 'gray',
+        padding: 4,
+        flex: 1
+    },
+    sortBtn: {
+        backgroundColor: 'lightgray',
+        width: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 5
+    },
+    sortBtnText: {
+        fontSize: 24
+    },
+    sortMenu: {
+        top: '100%',
+        right: 0,
+        position: 'absolute',
+        backgroundColor: 'white',
+        zIndex: 1,
+        borderColor: 'gray',
+        borderWidth: 1,
+    },
+    sortMenuBtn: {
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderWidth: 1,
+        borderColor: 'gray'
+    },
+    sortMenuBtnText: {
+        fontSize: 18,
+        textAlign: 'center'
+    },
+    sortMenuSubHeader: {
+        paddingVertical: 8,
+        textAlign: 'center',
+        fontWeight: 'bold'
     }
 });

@@ -33,7 +33,7 @@ export default function Settings (props) {
             onRequestClose={() => {props.handleModalClose(props.setShowSettings)}}
         >   
 
-            <View style={{...styles.modal}}>
+            <View style={{...styles.modalView}}>
 
                 {/* Dismiss Button */}
                 <View style={{...styles.modalCloseBtnWrapper}}>

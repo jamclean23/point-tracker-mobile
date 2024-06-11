@@ -11,9 +11,11 @@ import styles from "./styles";
 import handleModalOpenClick from "./functions/handleModalOpenClick";
 import handleModalClose from "./functions/handleModalClose";
 import renderMapMessages from "./functions/renderMapMessages";
+import handleLoad from "./functions/handleLoad";
 
 // Components
 import Settings from "./modals/Settings";
+import Sites from "./modals/sites/Sites";
 
 
 // ====== FUNCTIONS ======
@@ -23,6 +25,8 @@ export default function MainScreen (props) {
     // == STATE
 
     const [showSettings, setShowSettings] = useState(false);
+    const [showSites, setShowSites] = useState(false);
+
     const [region, setRegion] = useState({
         latitude: 29.531960001731047,
         longitude: -98.4955169,
@@ -33,16 +37,25 @@ export default function MainScreen (props) {
     const [currentSite, setCurrentSite] = useState();
     const [points, setPoints] = useState([]);
 
+
     // == USE EFFECT
 
     // Debug
     useEffect(() => {
     }, [props.userToken]);
 
+    // On mount
+    useEffect(() => {
+        handleLoad(setSites, props.userToken);
+    }, []);
+
+
     // == RENDER
 
     return (
-        <Animated.View style={styles.main}>
+        <Animated.View 
+            style={styles.main}
+        >
 
             {/* Header */}
             <View style={styles.header}>
@@ -77,6 +90,7 @@ export default function MainScreen (props) {
                         })()
                     }}
                     disabled={!sites.length}
+                    onPress={() => {handleModalOpenClick(setShowSites)}}
                 >
                     <Text style={{...styles.toolbarText}}>Sites</Text>
                 </TouchableOpacity>
@@ -116,6 +130,12 @@ export default function MainScreen (props) {
                 userToken={props.userToken}
             />
 
+            <Sites
+                showSites={showSites}
+                setShowSites={setShowSites}
+                handleModalClose={handleModalClose}
+                sites={sites}
+            />
         </Animated.View>
     );
 

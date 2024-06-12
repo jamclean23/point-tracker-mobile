@@ -102,7 +102,7 @@ export default styles = StyleSheet.create({
     },
     modalContentWrapper: {
         flex: 1,
-        paddingTop: 8
+        paddingTop: 8,
     },
     modalScrollContent: {
         
@@ -204,6 +204,8 @@ export default styles = StyleSheet.create({
         zIndex: 1,
         borderColor: 'gray',
         borderWidth: 1,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8
     },
     sortMenuBtn: {
         paddingHorizontal: 16,

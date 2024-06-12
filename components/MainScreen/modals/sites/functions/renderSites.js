@@ -12,6 +12,9 @@ import uuid from 'react-native-uuid';
 // Styling
 import styles from "../../../styles";
 
+// Functions
+import handleSiteBtnPress from "./handleSiteBtnPress";
+
 // ====== FUNCTIONS ======
 
 /**
@@ -20,7 +23,7 @@ import styles from "../../../styles";
  * @param {*} sortMethod - 'name' || 'op', used for sorting returned component array
  * @returns 
  */
-export default function renderSites (sites, sortMethod = 'op', filter = '') {
+export default function renderSites (sites, sortMethod = 'op', filter = '', setCurrentSite, closeModal) {
 
     // Fail conditions
     if (!Array.isArray(sites) || !sites.length) {
@@ -57,6 +60,7 @@ export default function renderSites (sites, sortMethod = 'op', filter = '') {
             <TouchableOpacity
                 key={uuid.v4()}
                 style={styles.siteEntry}
+                onPress={() => handleSiteBtnPress(site, setCurrentSite, closeModal)}
             >
                 {/* Operation */}
                 <Text style={styles.opText}>{site.op_name}</Text>

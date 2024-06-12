@@ -17,8 +17,8 @@ import uuid from 'react-native-uuid';
 export default function renderMapMessages (currentSite, sites = []) {
     const messages = [];
 
-    if (currentSite && 'name' in currentSite && currentSite.name) {
-        messages.push(buildMessageComponent(currentSite.name));
+    if (currentSite && 'op_name' in currentSite && currentSite.op_name) {
+        messages.push(buildMessageComponent(currentSite.op_name));
     } else if (!sites.length) {
         messages.push(buildMessageComponent('Retrieving Sites...'));
     } else {

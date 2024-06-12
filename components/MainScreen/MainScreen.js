@@ -2,7 +2,7 @@
 
 // ====== IMPORTS ======
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, Text, Animated, TouchableOpacity, Modal, TouchableWithoutFeedback, ScrollView } from "react-native";
 import MapView from "react-native-maps";
 import styles from "./styles";
@@ -12,10 +12,12 @@ import handleModalOpenClick from "./functions/handleModalOpenClick";
 import handleModalClose from "./functions/handleModalClose";
 import renderMapMessages from "./functions/renderMapMessages";
 import handleLoad from "./functions/handleLoad";
+import renderMapMarkers from "./functions/renderMapMarkers";
 
 // Components
 import Settings from "./modals/Settings";
 import Sites from "./modals/sites/Sites";
+import updateMap from "./functions/updateMap";
 
 
 // ====== FUNCTIONS ======
@@ -28,21 +30,29 @@ export default function MainScreen (props) {
     const [showSites, setShowSites] = useState(false);
 
     const [region, setRegion] = useState({
-        latitude: 29.531960001731047,
+        latitude: 28.531960001731047,
         longitude: -98.4955169,
-        latitudeDelta: 30,
+        latitudeDelta: 20,
         longitudeDelta: 0
     });
     const [sites, setSites] = useState([]);
     const [currentSite, setCurrentSite] = useState();
     const [points, setPoints] = useState([]);
 
+    const mapRef = useRef();
 
     // == USE EFFECT
 
     // Debug
     useEffect(() => {
-    }, [props.userToken]);
+    }, [points]);
+
+    // On currentSiteChange
+    useEffect(() => {
+        if (currentSite) {
+            updateMap(mapRef, currentSite, props.userToken, setPoints);
+        } 
+    }, [currentSite]);
 
     // On mount
     useEffect(() => {
@@ -67,8 +77,12 @@ export default function MainScreen (props) {
             <View style={styles.mapContainer}>
                 <MapView 
                     style={styles.map}
-                    region={region}
-                />
+                    initialRegion={region}
+                    ref={mapRef}
+                    rotateEnabled={false}
+                >
+                    {renderMapMarkers(currentSite, points)}
+                </MapView>
                 <View style={styles.messageContainer}>
                     {renderMapMessages(currentSite, sites)}
                 </View>
@@ -77,7 +91,7 @@ export default function MainScreen (props) {
             {/* Toolbar */}
             <View style={styles.toolbar}>
 
-                {/* Find new site */}
+                {/* Find new site btn */}
                 <TouchableOpacity 
                     style={{
                         ...styles.toolbarBtn,
@@ -135,6 +149,7 @@ export default function MainScreen (props) {
                 setShowSites={setShowSites}
                 handleModalClose={handleModalClose}
                 sites={sites}
+                setCurrentSite={setCurrentSite}
             />
         </Animated.View>
     );

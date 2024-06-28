@@ -27,7 +27,7 @@ export default function renderSites (sites, sortMethod = 'op', filter = '', setC
 
     // Fail conditions
     if (!Array.isArray(sites) || !sites.length) {
-        return []
+        return [];
     }
 
 
@@ -59,7 +59,7 @@ export default function renderSites (sites, sortMethod = 'op', filter = '', setC
         sitesComponents.push(
             <TouchableOpacity
                 key={uuid.v4()}
-                style={styles.siteEntry}
+                style={styles.modalEntry}
                 onPress={() => handleSiteBtnPress(site, setCurrentSite, closeModal)}
             >
                 {/* Operation */}

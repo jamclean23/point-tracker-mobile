@@ -157,8 +157,8 @@ export default styles = StyleSheet.create({
     messageText: {
         fontSize: 18
     },
-    // Sites Modal
-    siteEntry: {
+    // Modal entries
+    modalEntry: {
         marginBottom: 24,
         borderWidth: 1,
         borderColor: 'gray',
@@ -166,11 +166,16 @@ export default styles = StyleSheet.create({
         paddingHorizontal: 32,
         paddingVertical: 8
     },
+    pointNameText: {
+        textAlign: 'center',
+        marginBottom: 8,
+        fontWeight: 'bold'
+    },
     opText: {
         textAlign: 'center',
         marginBottom: 8,
         fontWeight: 'bold'
-        },
+    },
     sortMethodInfo: {
         paddingVertical: 8,
         borderBottomWidth: 1,

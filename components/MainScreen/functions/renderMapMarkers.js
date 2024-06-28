@@ -47,7 +47,22 @@ export default function renderMapMarkers (currentSite, points) {
                     }}
                 >
                     <Callout>
-                        <Text>Blah</Text>
+
+                        {/* Name */}
+                        <Text>{(() => {
+                            if ("cp_name" in point) {
+                                return point.cp_name;
+                            } else {
+                                return 'Control Point'
+                            }
+                        })()}</Text>
+                        
+                        {/* Lat */}
+                        <Text>Lat: {point.lat}</Text>
+
+                        {/* Long */}
+                        <Text>Long: {point.long}</Text>
+
                     </Callout>
                 </Marker>
             );

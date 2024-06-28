@@ -13,11 +13,12 @@ import handleModalClose from "./functions/handleModalClose";
 import renderMapMessages from "./functions/renderMapMessages";
 import handleLoad from "./functions/handleLoad";
 import renderMapMarkers from "./functions/renderMapMarkers";
+import updateMap from "./functions/updateMap";
 
 // Components
 import Settings from "./modals/Settings";
 import Sites from "./modals/sites/Sites";
-import updateMap from "./functions/updateMap";
+import Points from "./modals/points/Points";
 
 
 // ====== FUNCTIONS ======
@@ -28,6 +29,8 @@ export default function MainScreen (props) {
 
     const [showSettings, setShowSettings] = useState(false);
     const [showSites, setShowSites] = useState(false);
+    const [showPoints, setShowPoints] = useState(false);
+
 
     const [region, setRegion] = useState({
         latitude: 28.531960001731047,
@@ -122,6 +125,7 @@ export default function MainScreen (props) {
                         })()
                     }}
                     disabled={!points.length}
+                    onPress={() => {handleModalOpenClick(setShowPoints)}}
                 >
                     <Text style={{...styles.toolbarText}}>Points</Text>
                 </TouchableOpacity>
@@ -150,6 +154,14 @@ export default function MainScreen (props) {
                 handleModalClose={handleModalClose}
                 sites={sites}
                 setCurrentSite={setCurrentSite}
+            />
+
+            <Points
+                showPoints={showPoints}
+                setShowPoints={setShowPoints}
+                handleModalClose={handleModalClose}
+                points={points}
+                mapRef={mapRef}
             />
         </Animated.View>
     );

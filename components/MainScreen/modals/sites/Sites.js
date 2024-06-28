@@ -129,7 +129,9 @@ export default function Sites (props) {
                     {/* Sites in scrollview */}
                     <View style={{...styles.modalContentWrapper}}>
                         <ScrollView style={{...styles.modalScrollContent}}>
-                            {renderSites(props.sites, sortMethod, sitesFilter, props.setCurrentSite, () => {props.handleModalClose(props.setShowSites)})}
+                            <View onStartShouldSetResponder={() => true}>
+                                {renderSites(props.sites, sortMethod, sitesFilter, props.setCurrentSite, () => {props.handleModalClose(props.setShowSites)})}
+                            </View>
                         </ScrollView>
                     </View>
                 </View>

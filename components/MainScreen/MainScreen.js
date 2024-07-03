@@ -69,7 +69,6 @@ export default function MainScreen (props) {
         <Animated.View 
             style={styles.main}
         >
-
             {/* Header */}
             <View style={styles.header}>
                 <Text style={{...styles.headerText, ...styles.pointText}}>Point</Text>
@@ -86,8 +85,10 @@ export default function MainScreen (props) {
                 >
                     {renderMapMarkers(currentSite, points)}
                 </MapView>
-                <View style={styles.messageContainer}>
-                    {renderMapMessages(currentSite, sites)}
+                <View 
+                    style={styles.messageContainer}
+                >
+                    {renderMapMessages(currentSite, sites, points, mapRef)}
                 </View>
             </View>
 

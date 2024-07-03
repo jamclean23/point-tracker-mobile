@@ -5,7 +5,7 @@
 
 /**
  * @param {Object} point - Object containing point data
- * @param {Object} mapRef - Referenct to Mapview component
+ * @param {Object} mapRef - Reference to Mapview component
  */
 export default async function panMapToPoint (point, mapRef) {
         // Move map to new view and zoom level

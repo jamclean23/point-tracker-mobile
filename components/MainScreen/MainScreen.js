@@ -90,7 +90,7 @@ export default function MainScreen (props) {
                 <View 
                     style={styles.messageContainer}
                 >
-                    {renderMapMessages(currentSite, sites, points, mapRef)}
+                    {renderMapMessages(currentSite, sites, points, mapRef, setShowSites)}
                 </View>
             </View>
 

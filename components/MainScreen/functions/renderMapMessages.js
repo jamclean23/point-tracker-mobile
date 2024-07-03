@@ -15,7 +15,7 @@ import handleMsgContainerPress from './handleMsgContainerPress';
  * @param {Array} sites - Array of available sites 
  * @returns 
  */
-export default function renderMapMessages (currentSite, sites = [], points, mapRef) {
+export default function renderMapMessages (currentSite, sites = [], points, mapRef, setShowSites) {
     const messages = [];
 
     if (currentSite && 'op_name' in currentSite && currentSite.op_name) {
@@ -23,14 +23,14 @@ export default function renderMapMessages (currentSite, sites = [], points, mapR
     } else if (!sites.length) {
         messages.push(buildMessageComponent('Retrieving Sites...'));
     } else {
-        messages.push(buildMessageComponent('No Site Selected'));
+        messages.push(buildMessageComponent('No Site Selected', null, null, null, setShowSites));
     }
 
 
     return messages;
 }
 
-function buildMessageComponent (message, currentSite, points, mapRef) {
+function buildMessageComponent (message, currentSite, points, mapRef, setShowSites = null) {
     return (
         <TouchableOpacity
             key={uuid.v4()}
@@ -38,6 +38,8 @@ function buildMessageComponent (message, currentSite, points, mapRef) {
             onPress={(() => {
                 if (currentSite) {
                     return () => {handleMsgContainerPress(currentSite, points, mapRef)}
+                } else {
+                    return () => {setShowSites(true)}
                 }
             })()}
         >

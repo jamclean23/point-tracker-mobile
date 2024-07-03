@@ -7,12 +7,12 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Modal, ScrollView } from "react-native";
 
 // Stylesheet
-import styles from "../styles";
+import styles from "../../styles";
 
 // Functions
-import logoutHandler from "../functions/logoutHandler";
-import deleteAccountHandler from "../functions/deleteAccountHandler";
-import pingHandler from "../functions/pingHandler";
+import logoutHandler from "../../functions/logoutHandler";
+import deleteAccountHandler from "../../functions/deleteAccountHandler";
+import pingHandler from "../../functions/pingHandler";
 
 //  ====== COMPONENT ======
 
@@ -52,6 +52,78 @@ export default function Settings (props) {
                 <View style={{...styles.modalContentWrapper}}>
                     <ScrollView style={{...styles.modalScrollContent}}>
                         
+                        {/* Map */}
+                        <View style={{...styles.modalSettingsGroup}}>
+
+                            {/* Sub Header */}
+                            <Text style={{...styles.modalSubHeader}}>Map Content</Text>
+
+                            <View style={{...styles.modalSettingsGroupContent}}>
+
+                                {/* Road */}
+                                <View style={{...styles.modalSettingsGroupBtnWrapper}}>
+                                    <TouchableOpacity 
+                                        style={{
+                                            ...styles.modalBtn,
+                                            ...(() => {
+                                                if (!(props.mapContentType === 'standard')) {
+                                                    return styles.disabledBtn;
+                                                }
+                                            })()
+                                        }}
+                                        onPress={() => {
+                                            props.setMapContentType('standard');
+                                            props.handleModalClose(props.setShowSettings);
+                                        }}
+                                    >
+                                        <Text style={{...styles.modalBtnText}}>Road</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                                {/* Terrain*/}
+                                <View style={{...styles.modalSettingsGroupBtnWrapper}}>
+                                    <TouchableOpacity 
+                                        style={{
+                                            ...styles.modalBtn,
+                                            ...(() => {
+                                                if (!(props.mapContentType === 'terrain')) {
+                                                    return styles.disabledBtn;
+                                                }
+                                            })()
+                                        }}
+                                        onPress={() => {
+                                            props.setMapContentType('terrain');
+                                            props.handleModalClose(props.setShowSettings);
+                                        }}
+                                    >
+                                        <Text style={{...styles.modalBtnText}}>Terrain</Text>
+                                    </TouchableOpacity>
+                                </View>   
+
+                                {/* Satellite */}
+                                <View style={{...styles.modalSettingsGroupBtnWrapper}}>
+                                    <TouchableOpacity 
+                                        style={{
+                                            ...styles.modalBtn,
+                                            ...(() => {
+                                                if (!(props.mapContentType === 'satellite')) {
+                                                    return styles.disabledBtn;
+                                                }
+                                            })()
+                                        }}
+                                        onPress={() => {
+                                            props.setMapContentType('satellite');
+                                            props.handleModalClose(props.setShowSettings);
+                                        }}
+                                    >
+                                        <Text style={{...styles.modalBtnText}}>Satellite</Text>
+                                    </TouchableOpacity>
+                                </View>   
+
+                            </View>
+
+                        </View>
+
                         {/* Connectivity */}
                         <View style={{...styles.modalSettingsGroup}}>
 

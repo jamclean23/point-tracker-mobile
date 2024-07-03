@@ -16,7 +16,7 @@ import renderMapMarkers from "./functions/renderMapMarkers";
 import updateMap from "./functions/updateMap";
 
 // Components
-import Settings from "./modals/Settings";
+import Settings from "./modals/Settings/Settings";
 import Sites from "./modals/sites/Sites";
 import Points from "./modals/points/Points";
 
@@ -41,6 +41,7 @@ export default function MainScreen (props) {
     const [sites, setSites] = useState([]);
     const [currentSite, setCurrentSite] = useState();
     const [points, setPoints] = useState([]);
+    const [mapContentType, setMapContentType] = useState('satellite');
 
     const mapRef = useRef();
 
@@ -82,6 +83,7 @@ export default function MainScreen (props) {
                     initialRegion={region}
                     ref={mapRef}
                     rotateEnabled={false}
+                    mapType={mapContentType}
                 >
                     {renderMapMarkers(currentSite, points)}
                 </MapView>
@@ -147,6 +149,8 @@ export default function MainScreen (props) {
                 handleModalClose={handleModalClose}
                 resetApp={props.resetApp} 
                 userToken={props.userToken}
+                mapContentType={mapContentType}
+                setMapContentType={setMapContentType}
             />
 
             <Sites

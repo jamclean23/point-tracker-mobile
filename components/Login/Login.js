@@ -22,13 +22,15 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 
 // Functions 
-import sleep from '../../shared/functions/sleep';
 import attemptLogin from '../../shared/functions/attemptLogin';
 import attemptCreateAccount from '../../shared/functions/attemptCreateAccount';
 import saveToken from '../../shared/functions/saveToken';
 
-// From validation
+// Form validation
 import Validate from './functions/Validate';
+
+// Components
+import EmailVerify from './modals/EmailVerify/EmailVerify';
 
 
 // ====== FUNCTIONS ======
@@ -38,6 +40,11 @@ export default function Login (props) {
     // == STATE
 
     const renderCounter = useRef(0);
+
+    // Modal visibility
+    const [showEmailVerify, setShowEmailVerify] = useState(false);
+    const [recipient, setRecipient] = useState('');
+    const [emailAuthToken, setEmailAuthToken] = useState('');
 
     // Sub page routing
     const [currentPage, setCurrentPage] = useState('login');
@@ -242,7 +249,18 @@ export default function Login (props) {
         }
 
         errors.forEach((error, index) => {
-            if ('field' in error && 'message' in error) {
+            if ('code' in error) { // Handle code if the error has one
+                switch(error.code) {
+                    case 'not_verified':
+                        if ("email" in error && typeof error.email === 'string') {
+                            setRecipient(error.email);
+                            // Email auth token contains jwt with encoded email address
+                            setEmailAuthToken(error.emailAuthToken);
+                        }
+                        setShowEmailVerify(true);
+                        break
+                }
+            } else if ('field' in error && 'message' in error) { // Otherwise display message
                 if (error.field === 'serverMsg') {
                     Alert.alert('Login Failed', error.message);
                 } else {
@@ -726,13 +744,20 @@ export default function Login (props) {
                             </View>
                         </ScrollView>
                     </View>
-                </View>,
+                </View>
         }
 
     return (
         <Animated.View style={{...styles.mainWrapper, opacity: opacInterpolated}}>
             <TouchableWithoutFeedback onPress={handleScreenTouch}><View style={{...styles.screenWrapper}}></View></TouchableWithoutFeedback>
            {pages[currentPage]}
+
+            <EmailVerify
+                showEmailVerify={showEmailVerify}
+                setShowEmailVerify={setShowEmailVerify}
+                recipient={recipient}
+                emailAuthToken={emailAuthToken}
+            />
         </Animated.View>
     );
 }

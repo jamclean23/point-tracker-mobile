@@ -23,7 +23,7 @@ export default async function attemptCreateAccount (
 
     const controller = new AbortController();
     const signal = controller.signal;
-    const id = setTimeout(() => controller.abort(), 8000);
+    const id = setTimeout(() => controller.abort(), 12000);
     try {
         const response = await fetch(`${process.env.SERVER_DOMAIN}/auth/create`, {
             headers: {

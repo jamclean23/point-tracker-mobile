@@ -7,6 +7,7 @@
  * 
  * @param {Function} setShowModal - Visibility setter
  */
-export default function handleEmailVerifyClose (setShowModal) {
+export default function handleEmailVerifyClose (setShowModal, setShouldListenForVerify) {
+    setShouldListenForVerify(false);
     setShowModal(false);
 }

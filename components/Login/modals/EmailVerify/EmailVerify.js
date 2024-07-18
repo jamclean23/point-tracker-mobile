@@ -16,6 +16,8 @@ import determineResendBtnDisabled from "./functions/determineResendBtnDisabled";
 import handleOnShow from "./functions/handleOnShow";
 import sendEmail from "./functions/sendEmail";
 import tickResendTimer from "./functions/tickResendTimer";
+import verifyListener from "./functions/verifyListener";
+
 
 // ====== FUNCTIONS ======
 
@@ -26,16 +28,27 @@ export default function EmailVerify (props) {
     const [resendTimer, setResendTimer] = useState(0);
     const [emailSent, setEmailSent] = useState(false);
     const [emailRequestOngoing, setEmailRequestOngoing] = useState(false);
+    const [shouldListenForVerify, setShouldListenForVerify] = useState(false);
+    const shouldListenForVerifyRef = useRef(false);
 
     // == USE EFFECT
 
     // Resend Btn timer
     useEffect(() => {
-        console.log(resendTimer);
         if (resendTimer) {
             tickResendTimer(resendTimer, setResendTimer);
         }
     }, [resendTimer]);
+
+    // Email verified listener
+    useEffect(() => {
+        if (shouldListenForVerify) {
+            shouldListenForVerifyRef.current = true;
+            verifyListener(props.emailAuthToken, shouldListenForVerifyRef, () => handleEmailVerifyClose(props.setShowEmailVerify, setShouldListenForVerify));
+        } else {
+            shouldListenForVerifyRef.current = false;
+        }
+    }, [shouldListenForVerify]);
 
     // == RENDER
     return (
@@ -45,9 +58,9 @@ export default function EmailVerify (props) {
             visible={props.showEmailVerify}
             transparent={true}
             statusBarTranslucent
-            onShow={() => handleOnShow(resendTimer, setResendTimer)}
+            onShow={() => handleOnShow(setResendTimer, setShouldListenForVerify)}
             onRequestClose={() => {
-                handleEmailVerifyClose(props.setShowEmailVerify);
+                handleEmailVerifyClose(props.setShowEmailVerify, setShouldListenForVerify);
             }}
             
         >   

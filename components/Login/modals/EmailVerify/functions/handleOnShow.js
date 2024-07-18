@@ -2,19 +2,21 @@
 
 // ====== IMPORTS ======
 
-import tickResendTimer from './tickResendTimer';
-
 
 // ====== FUNCTION ======
 
 /**
  * 
- * @param {Number} resendTimer 
- * @param {Function} setResendTimer 
+ * @param {*} resendTimer 
+ * @param {*} setResendTimer 
+ * @param {*} emailAuthToken 
+ * @param {*} shouldListenForVerify 
+ * @param {*} setShouldListenForVerify 
  */
 export default function handleOnShow (
-    resendTimer,
-    setResendTimer
+    setResendTimer,
+    setShouldListenForVerify
 ) {
+    setShouldListenForVerify(true);
     setResendTimer(0);
 }

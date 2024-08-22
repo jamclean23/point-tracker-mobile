@@ -580,6 +580,20 @@ export default function Login (props) {
                                 </View>
                             </View>
 
+                            {/* Forgot Password Button */}
+                            <View>
+                                <View style={{...styles.defaultBtnWrapper, ...styles.loginBtnWrapper}}>
+                                    <TouchableOpacity 
+                                        style={{
+                                            ...styles.forgotPasswordBtn
+                                        }}
+                                        // onPress={}
+                                    >
+                                        <Text style={{...styles.forgotPasswordText}}>Forgot Password?</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+
                             {/* Border */}
                             <View style={{...styles.borderContainer}}>
                                 <View style={{...styles.borderLine}}></View>
@@ -891,6 +905,10 @@ const styles = StyleSheet.create({
     },
     disabledBtn: {
         backgroundColor: 'gray'
+    },
+    forgotPasswordBtn: {
+        paddingHorizontal: 50,
+        paddingVertical: 10
     }
     
 })

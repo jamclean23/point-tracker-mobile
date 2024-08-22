@@ -13,6 +13,9 @@ import {
     TouchableOpacity
 } from "react-native";
 
+// Icons
+import { Ionicons } from '@expo/vector-icons';
+
 // Styles
 import modalStyles from "./styles";
 import loginStyles from "../../styles";
@@ -40,6 +43,9 @@ export default function ForgotPassword (props) {
                     {/* Header */}
                     <View style={{...loginStyles.header}}>
                         <Text style={{...loginStyles.headerText}}>Reset Password</Text>
+                        <TouchableOpacity style={{...loginStyles.backArrow}} onPress={() => handleForgotPasswordModalClose(props.setShowForgotPasswordModal)}>
+                                <Ionicons name="arrow-back-sharp" size={30} color="black" />
+                        </TouchableOpacity>
                     </View>
 
                     {/* Scrollable Content */}

@@ -20,6 +20,7 @@ export default StyleSheet.create({
     main: {
         marginTop: 50,
         marginBottom: 20,
+
         flex: 1,
         width: '90%',
         backgroundColor: 'white',
@@ -137,8 +138,5 @@ export default StyleSheet.create({
     forgotPasswordBtn: {
         paddingHorizontal: 50,
         paddingVertical: 10
-    },
-    forgotPasswordText: {
-
     }
 });

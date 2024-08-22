@@ -157,11 +157,6 @@ export default function Login (props) {
     }, [username, password]);
 
 
-    // DEBUG
-    useEffect(() => {
-        console.log('showForgotPasswordModal: ', showForgotPasswordModal);
-    }, [showForgotPasswordModal]);
-
     // == FUNCTIONS
 
     function clearInputs () {

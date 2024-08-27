@@ -3,7 +3,7 @@
 // ====== IMPORTS ======
 
 // React
-import React from "react";
+import React, { useState } from "react";
 import { 
     Modal,
     View,
@@ -22,10 +22,18 @@ import loginStyles from "../../styles";
 
 // Functions
 import handleForgotPasswordModalClose from "./functions/handleForgotPasswordModalClose";
+import handleEmailChange from "./functions/handleEmailChange";
 
 // ====== FUNCTIONS ======
 
 export default function ForgotPassword (props) {
+
+    // == STATE
+
+    const [email, setEmail] = useState('');
+    const [emailErr, setEmailErr] = useState('');
+
+    // == RENDER
     return (
         <Modal
             presentationStyle="overFullScreen"
@@ -62,10 +70,23 @@ export default function ForgotPassword (props) {
 
                                 {/* Email */}
                                 <View style={{...styles.inputWrapper}}>
+
+                                    {/* Label */}
                                     <Text style={{...loginStyles.formLabel}}>Email</Text>
+
+                                    {/* Field */}
                                     <TextInput
                                         style={{...loginStyles.formInput}}
-                                        />
+                                        value={email}
+                                        onChangeText={(text) => handleEmailChange(text, setEmail, setEmailErr)}
+                                    />
+
+                                    {/* Errors */}
+                                    <Text
+                                        style={{...loginStyles.formErr}}
+                                    >
+                                        {emailErr}
+                                    </Text>
                                 </View>
 
                                 {/* Submit Button */}

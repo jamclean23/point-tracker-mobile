@@ -680,7 +680,8 @@ export default function Login (props) {
                                 <TextInput 
                                     style={{...styles.formInput}} 
                                     value={confirmPassword} 
-                                    onChangeText={(text) => handleConfirmPasswordChange(text)}secureTextEntry={true}
+                                    onChangeText={(text) => handleConfirmPasswordChange(text)}
+                                    secureTextEntry={true}
                                     placeholder='Confirm Password'
                                 />
                                 <Text style={{...styles.formErr}}>{confirmPasswordErr}</Text>

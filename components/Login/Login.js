@@ -37,6 +37,8 @@ import Validate from './functions/Validate';
 import EmailVerify from './modals/EmailVerify/EmailVerify';
 import ForgotPassword from './modals/ForgotPassword/ForgotPassword';
 
+// ENV Variables
+import { SERVER_DOMAIN } from '@env';
 
 // ====== FUNCTIONS ======
 

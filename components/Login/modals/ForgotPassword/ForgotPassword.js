@@ -17,12 +17,13 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 
 // Styles
-import modalStyles from "./styles";
+import styles from "./styles";
 import loginStyles from "../../styles";
 
 // Functions
 import handleForgotPasswordModalClose from "./functions/handleForgotPasswordModalClose";
 import handleEmailChange from "./functions/handleEmailChange";
+import handleSubmitPress from "./functions/handleSubmitPress";
 
 // ====== FUNCTIONS ======
 
@@ -32,6 +33,7 @@ export default function ForgotPassword (props) {
 
     const [email, setEmail] = useState('');
     const [emailErr, setEmailErr] = useState('');
+    const [submitting, setSubmitting] = useState(false);
 
     // == RENDER
     return (
@@ -91,7 +93,22 @@ export default function ForgotPassword (props) {
 
                                 {/* Submit Button */}
                                 <View style={{...loginStyles.defaultBtnWrapper}}>
-                                    <TouchableOpacity style={{...loginStyles.defaultBtn}}>
+                                    <TouchableOpacity 
+                                        disabled={submitting}
+                                        style={
+                                            submitting
+                                                ? {...loginStyles.defaultBtn, ...loginStyles.disabledBtn}
+                                                : {...loginStyles.defaultBtn}
+                                        }
+                                        onPress={() => {
+                                            handleSubmitPress(
+                                                email, 
+                                                setEmailErr,
+                                                setSubmitting,
+                                                () => handleForgotPasswordModalClose(props.setShowForgotPasswordModal)
+                                            );
+                                        }}
+                                    >
                                         <Text style={{...loginStyles.defaultBtnText}}>Submit</Text>
                                     </TouchableOpacity>
                                 </View>

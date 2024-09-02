@@ -136,6 +136,7 @@ export default function App() {
     // == Render
         return (
             <View style={styles.mainWrapper}>
+                <StatusBar translucent backgroundColor='transparent' style='dark'/>
                 {(() => { 
                     switch (currentScreen) {
 

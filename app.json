@@ -18,6 +18,11 @@
       "supportsTablet": true
     },
     "android": {
+      "usesCleartextTraffic": true,
+      "permissions": "INTERNET",
+      "package": "com.jmdev.pointtracker",
+      "versionCode": 1,
+      "buildType": "apk",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -27,7 +32,21 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-secure-store"
-    ]
+      "expo-secure-store",
+      "expo-build-properties",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "14f88c05-2543-4fbf-9cc5-21d7bb410fe5"
+      }
+    }
   }
 }

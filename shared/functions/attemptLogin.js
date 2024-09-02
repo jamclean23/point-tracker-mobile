@@ -1,11 +1,23 @@
 // Send Fetch request to server to attempt login
 
+// ====== IMPORTS ======
+
+import { SERVER_DOMAIN } from '@env';
+
+// ====== FUNCTIONS/EXPORT
+
+/**
+ * 
+ * @param {String} username 
+ * @param {String} password 
+ * @returns 
+ */
 export default async function attemptLogin (username, password) {
     const controller = new AbortController();
     const signal = controller.signal;
     const id = setTimeout(() => controller.abort(), 8000);
     try {
-        const response = await fetch(`${process.env.SERVER_DOMAIN}/auth/login`, {
+        const response = await fetch(`${SERVER_DOMAIN}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

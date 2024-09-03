@@ -98,6 +98,7 @@ function buildAppJson (env) {
 function injectGMapsApiKey (env, appJson) {
     logHeader('Injecting Google Maps Api Key...');
     appJson.expo.android.config.googleMaps.apiKey = env.GOOGLE_MAPS_KEY;
+    appJson.expo.ios.config.googleMapsApiKey = env.GOOGLE_MAPS_KEY;
     logHeader('Done.');
 }
 

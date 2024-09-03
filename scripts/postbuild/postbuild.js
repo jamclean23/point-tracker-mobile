@@ -23,6 +23,7 @@ function scrubApiKeys () {
     logHeader('REMOVING API KEYS FROM app.json...');
     // Google Maps API key
     appJson.expo.android.config.googleMaps.apiKey = "";
+    appJson.expo.ios.config.googleMapsApiKey = "";
     logHeader('DONE');
 }
 

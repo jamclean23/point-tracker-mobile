@@ -15,7 +15,19 @@
             "**/*"
         ],
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "usesCleartextTraffic": true,
+            "permissions": "INTERNET",
+            "package": "com.jmdev.pointtracker",
+            "versionCode": 1,
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#ffffff"
+            },
+            "config": {
+                "googleMapsApiKey": ""
+            },
+            "bundleIdentifier": "com.jmdev.pointtracker"
         },
         "android": {
             "usesCleartextTraffic": true,

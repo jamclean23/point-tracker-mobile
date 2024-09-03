@@ -5,6 +5,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, Animated, TouchableOpacity, Modal, TouchableWithoutFeedback, ScrollView } from "react-native";
 import MapView from "react-native-maps";
+import { PROVIDER_GOOGLE } from "react-native-maps";
 import styles from "./styles";
 
 // Functions
@@ -84,6 +85,7 @@ export default function MainScreen (props) {
                     ref={mapRef}
                     rotateEnabled={false}
                     mapType={mapContentType}
+                    provider={PROVIDER_GOOGLE}
                 >
                     {renderMapMarkers(currentSite, points)}
                 </MapView>

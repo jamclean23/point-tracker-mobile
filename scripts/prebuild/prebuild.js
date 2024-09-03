@@ -4,17 +4,23 @@
 
 const fs = require('fs');
 const path = require('path');
+const logHeader = require('../shared/logHeader');
 
 const easConfig = require('./eas.json');
 const easFileLoc = path.resolve(__dirname, '../../eas.json');
 
+const appJsonFileLoc = path.resolve(__dirname, '../../app.json');
+const appJson = require(appJsonFileLoc); 
+
 //  ====== FUNCTIONS ======
+
+
+// == EAS
 
 // Inject env into eas.json, cleanup after
 
-function buildEasConfig () {
+function buildEasConfig (env) {
     logHeader('*** BUILDING EAS.JSON ***');
-    const env = prepareEnv();
 
     logHeader('Removing existing eas.json...');
     deleteEas();
@@ -49,10 +55,6 @@ function deleteEas () {
     }
 }
 
-function logHeader (text) {
-    console.log(`\n\x1b[36m${text}\x1b[0m`);
-};
-
 function parseEnv () {
     // Normalize carraige returns
     const envContent = fs.readFileSync(path.resolve(__dirname, '../../.env'), 'utf8').replaceAll('\r\n', '\n');
@@ -80,6 +82,29 @@ function parseEnv () {
     return envVars
 }
 
+// == APP.JSON
+
+function buildAppJson (env) {
+
+    logHeader('*** BUILDING APP.JSON ***');
+
+    // Google Maps Api Key
+    injectGMapsApiKey(env, appJson);
+
+    // Write changes
+    fs.writeFileSync(appJsonFileLoc, JSON.stringify(appJson, null, 4), 'utf8');
+}
+
+function injectGMapsApiKey (env, appJson) {
+    logHeader('Injecting Google Maps Api Key...');
+    appJson.expo.android.config.googleMaps.apiKey = env.GOOGLE_MAPS_KEY;
+    logHeader('Done.');
+}
+
 // ====== RUN ======
 
-buildEasConfig();
+logHeader('\n====\nSTARTING PRE BUILD SCRIPT');
+const env = prepareEnv();
+buildEasConfig(env);
+buildAppJson(env);
+logHeader('FINISHED PRE BUILD\n====\n');

@@ -1,57 +1,57 @@
 {
-  "expo": {
-    "name": "point-tracker",
-    "slug": "point-tracker",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "usesCleartextTraffic": true,
-      "permissions": "INTERNET",
-      "package": "com.jmdev.pointtracker",
-      "versionCode": 1,
-      "buildType": "apk",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "config": {
-        "googleMaps": {
-          "apiKey": "YOUR API KEY HERE"
+    "expo": {
+        "name": "point-tracker",
+        "slug": "point-tracker",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "supportsTablet": true
+        },
+        "android": {
+            "usesCleartextTraffic": true,
+            "permissions": "INTERNET",
+            "package": "com.jmdev.pointtracker",
+            "versionCode": 1,
+            "buildType": "apk",
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#ffffff"
+            },
+            "config": {
+                "googleMaps": {
+                    "apiKey": "AIzaSyAmd5syHdmYWAoLumdBVkUQRQjGK1H_W-k"
+                }
+            }
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "plugins": [
+            "expo-secure-store",
+            "expo-build-properties",
+            [
+                "expo-build-properties",
+                {
+                    "android": {
+                        "usesCleartextTraffic": true
+                    }
+                }
+            ]
+        ],
+        "extra": {
+            "eas": {
+                "projectId": "14f88c05-2543-4fbf-9cc5-21d7bb410fe5"
+            }
         }
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "expo-secure-store",
-      "expo-build-properties",
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "usesCleartextTraffic": true
-          }
-        }
-      ]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "14f88c05-2543-4fbf-9cc5-21d7bb410fe5"
-      }
     }
-  }
 }

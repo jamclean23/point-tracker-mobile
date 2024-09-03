@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "buildPreview": "node ./scripts/build-eas/build-eas.js && eas build -p android --profile preview"
+    "buildPreview": "node ./scripts/prebuild/prebuild.js && eas build -p android --profile preview && node ./scripts/postbuild/postbuild.js"
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.17",

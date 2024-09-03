@@ -4,7 +4,10 @@
 // ====== IMPORTS ======
 
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Animated, View, Dimensions, Easing } from 'react-native';
+import { Animated, View, Easing, Dimensions } from 'react-native';
+
+import buildStyles from './styles';
+const styles = buildStyles(Dimensions);
 
 // ====== FUNCTIONS ======
 
@@ -73,28 +76,28 @@ export default function InitScreen (props) {
 
 // ====== STYLES ======
 
-const styles = StyleSheet.create({
-    main: {
-        height: '100%'
-    },
-    loading: {
-        height: '100%',
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    bgImage: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: Dimensions.get('screen').height || '100%',
-    },
-    childrenContainer: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        height: '100%',
-        width: '100%'
-    }
-});
+// const styles = StyleSheet.create({
+//     main: {
+//         height: '100%'
+//     },
+//     loading: {
+//         height: '100%',
+//         width: '100%',
+//         justifyContent: 'center',
+//         alignItems: 'center'
+//     },
+//     bgImage: {
+//         position: 'absolute',
+//         top: 0,
+//         left: 0,
+//         width: '100%',
+//         height: Dimensions.get('screen').height || '100%',
+//     },
+//     childrenContainer: {
+//         position: 'absolute',
+//         top: 0,
+//         left: 0,
+//         height: '100%',
+//         width: '100%'
+//     }
+// });
